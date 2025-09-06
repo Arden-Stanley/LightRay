@@ -1,4 +1,4 @@
-# Light-Ray
+# LightRay
 A lightweight and fast real-time pathtracer
 
 ### Senior Design Planning

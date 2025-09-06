@@ -1,3 +1,3 @@
 project(Light-Ray)
 
-add_executable(lr main.c)
+add_executable(lightray main.c)

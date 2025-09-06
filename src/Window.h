@@ -1,8 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <string>
-#include <GLFW/glfw3.h>
+#include "Common.h"
 
 namespace LR {
 	class Window {
@@ -18,10 +17,15 @@ namespace LR {
 			~Window();
 		
 			/*
-			 * Performs window updates for each frame.
+			 * Performs frame-by-frame updates to the window by clearing the screen,
+			 * swapping buffers, and polling for window events.
 			 */	
 			void Update() const;
-
+			
+			/*
+			 * Returns a boolean value in which true means the window is still running and
+			 * has not triggered a glfwWindowShouldClose event on polling.
+			 */
 			bool IsRunning() const;
 		private:
 			GLFWwindow *_buffer;

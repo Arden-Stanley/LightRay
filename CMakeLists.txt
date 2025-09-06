@@ -7,3 +7,5 @@ add_executable(lightray src/main.cpp src/Window.cpp)
 add_subdirectory(./libs/glfw-3.4)
 target_link_libraries(lightray PUBLIC glfw)
 
+add_subdirectory(./libs/glad)
+target_link_libraries(lightray PUBLIC glad)

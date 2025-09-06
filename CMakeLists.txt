@@ -1,3 +1,9 @@
-project(Light-Ray)
+cmake_minimum_required(VERSION 4.1)
 
-add_executable(lightray main.c)
+project(LightRay)
+
+add_executable(lightray src/main.cpp src/Window.cpp)
+
+add_subdirectory(./libs/glfw-3.4)
+target_link_libraries(lightray PUBLIC glfw)
+

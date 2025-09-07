@@ -3,7 +3,7 @@
 
 #include "Common.h"
 
-namespace LR {
+namespace LightRay {
 	class Window {
 		public:
 			/*

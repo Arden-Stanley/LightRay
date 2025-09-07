@@ -1,6 +1,6 @@
 #include "Window.h"
 
-namespace LR {
+namespace LightRay {
 	Window::Window(const std::string &title, int width, int height) 
 	: _buffer(nullptr), _title(title), _width(width), _height(height) {
 		glfwInit();

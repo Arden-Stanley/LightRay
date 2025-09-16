@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 	
 	//Application main loop (happens every render).	
 	while (testWindow.IsRunning()) {
-
+		
 		testWindow.Update();
 
 	}	

@@ -2,7 +2,8 @@
 
 Window* create_window(int width, int height, char* title) {
 	if (!glfwInit()) {
-		fputs("ERROR: Could not initialized GLFW properly.\n", stderr);
+		perror("GLFW initialization failed");
+		exit(EXIT_FAILURE);
 	}
 	Window* window = (Window *)malloc(sizeof(Window));	
 	window->width = width;
@@ -10,7 +11,8 @@ Window* create_window(int width, int height, char* title) {
 	window->title = title;
 	window->buffer = glfwCreateWindow(width, height, title, NULL, NULL);
 	if (!window->buffer) {
-		fputs("ERROR: Could not create window with GLFW.\n", stderr);	
+		perror("Window opening failed");	
+		exit(EXIT_FAILURE);
 	}
 	return window;
 }
@@ -18,7 +20,8 @@ Window* create_window(int width, int height, char* title) {
 void start_window(Window* window) {
 	glfwMakeContextCurrent(window->buffer);	
 	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-		fputs("ERROR: Could not load GL functions with GLAD.\n", stderr);
+		perror("GLAD loading failed");
+		exit(EXIT_FAILURE);
 	};
 }
 

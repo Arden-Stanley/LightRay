@@ -7,7 +7,7 @@
 
 typedef unsigned int Shader;
 
-Shader* create_texture_shader(const char* vertex_path, const char* fragment_path);
+Shader create_texture_shader(const char* vertex_path, const char* fragment_path);
 
 Shader* create_raytracing_shader(const char* compute_path);
 

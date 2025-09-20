@@ -7,12 +7,17 @@
 
 typedef unsigned int Shader;
 
+typedef enum {
+	VERTEX,
+	FRAGMENT
+} Shader_Type;
+
 Shader create_texture_shader(const char* vertex_path, const char* fragment_path);
 
 Shader* create_raytracing_shader(const char* compute_path);
 
-void use_shader(Shader* shader);
+void use_shader(Shader shader);
 
-void destroy_shader(Shader* shader);
+void destroy_shader(Shader shader);
 
 #endif

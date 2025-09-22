@@ -18,13 +18,15 @@ namespace LR
 				COMPUTE	
 			} Type; 
 			unsigned int m_LoadShader(const std::string &path, Type shaderType) const;
-			unsigned int m_program;
 	};
 
 	class RenderShader : protected Shader
 	{
+		public:
 			RenderShader(const std::string &vertexPath, const std::string &fragmentPath);
 			~RenderShader();
+		private:
+			unsigned int m_program;
 	};
 
 	class RaytracingShader : protected Shader
@@ -32,6 +34,8 @@ namespace LR
 		public:
 			RaytracingShader(const std::string &computePath);
 			~RaytracingShader();
+		private:
+			unsigned int m_program;
 	};
 }
 

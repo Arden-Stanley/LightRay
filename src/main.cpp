@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Shader.h"
 #include "Common.h"
 
 int main(int argc, char** argv) 

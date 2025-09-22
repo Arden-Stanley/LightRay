@@ -2,19 +2,23 @@
 
 namespace LR 
 {
-	Shader::Use() const
+	void Shader::Use() const
 	{
 		glUseProgram(m_program);
 	}
 
-	unsigned int Shader::m_LoadShader(const std::string &path, Type shaderType) const {
+	unsigned int Shader::m_LoadShader(const std::string &path, Type shaderType) const 
+	{
 		std::ifstream file(path);
-		while (file)
+		
+		unsigned int shader;
+		return shader;
 	}
 
-	RenderShader::RenderShader(const std::string &vertexPath, const std::string &fragmentPath) 
+	RenderShader::RenderShader(const std::string& vertexPath, const std::string& fragmentPath)
+		: m_program(NULL)
 	{
-				
+		
 	}
 
 	RenderShader::~RenderShader() 
@@ -23,6 +27,7 @@ namespace LR
 	}
 
 	RaytracingShader::RaytracingShader(const std::string &computePath)
+		: m_program(NULL)
 	{
 	
 	}

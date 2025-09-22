@@ -18,9 +18,9 @@ namespace LR {
 
 	void Window::Update() const 
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	bool Window::IsRunning() const 

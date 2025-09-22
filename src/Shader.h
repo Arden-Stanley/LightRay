@@ -11,6 +11,7 @@ namespace LR
 			~Shader() = default;
 			void Use() const;
 		protected:
+			unsigned int m_program;
 			typedef enum 
 			{
 				VERTEX,
@@ -20,22 +21,18 @@ namespace LR
 			unsigned int m_LoadShader(const std::string &path, Type shaderType) const;
 	};
 
-	class RenderShader : protected Shader
+	class RenderShader : public Shader
 	{
 		public:
 			RenderShader(const std::string &vertexPath, const std::string &fragmentPath);
 			~RenderShader();
-		private:
-			unsigned int m_program;
 	};
 
-	class RaytracingShader : protected Shader
+	class RaytracingShader : public Shader
 	{
 		public:
 			RaytracingShader(const std::string &computePath);
 			~RaytracingShader();
-		private:
-			unsigned int m_program;
 	};
 }
 

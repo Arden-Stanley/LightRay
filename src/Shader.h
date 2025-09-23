@@ -10,6 +10,7 @@ namespace LR
 		public:
 			~Shader() = default;
 			void Use() const;
+			void SetUniform(const std::string &name, int value) const;
 		protected:
 			unsigned int m_program;
 			typedef enum 

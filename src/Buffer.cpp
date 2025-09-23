@@ -2,8 +2,8 @@
 
 namespace LR 
 {
-	Buffer::Buffer(const Window &window)
-		: m_vbo(0), m_vao(0), m_width(window.getWidth()), m_height(window.getHeight()), m_texture(0)
+	Buffer::Buffer(const std::unique_ptr<Window> &window)
+		: m_vbo(0), m_vao(0), m_width(window->getWidth()), m_height(window->getHeight()), m_texture(0)
 	{
 		float quad[] =
 		{
@@ -15,6 +15,14 @@ namespace LR
 			 1.0f,  1.0f,
 			-1.0f,  1.0f
 		};
+
+		float textureCoordinates[] =
+		{
+			1.0f, 1.0f,
+			1.0f, 0.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f
+		}
 
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
@@ -35,7 +43,7 @@ namespace LR
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_width, m_height, 0, GL_RGBA, GL_FLOAT, NULL);
 
-		glBindImageTexture(0, m_texture, 0, GL_FALSE, 0, GL_READ, GL_RGBA32F);
+		glBindImageTexture(0, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
 	}
 
 	Buffer::~Buffer() 
@@ -43,8 +51,16 @@ namespace LR
 		
 	}
 
-	void Buffer::Render() const
+	void Buffer::Render(const RaytracingShader &raytracer, const RenderShader &bufferShader) const
 	{
+		raytracer.Use();
+		glDispatchCompute((unsigned int) m_width, (unsigned int) m_height, 1);
+		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+		bufferShader.Use();
+		bufferShader.SetUniform("texture", 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_texture);
 		glBindVertexArray(m_vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}

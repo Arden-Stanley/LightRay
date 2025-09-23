@@ -18,12 +18,11 @@ int main(int argc, char** argv)
 		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\raytracer.glsl"
 	);
 
-	LR::Buffer screenBuffer();
+	LR::Buffer screenBuffer(window);
 
 	while(window->IsRunning())
 	{
-		bufferShader.Use();
-		screenBuffer.Render();
+		screenBuffer.Render(rtShader, bufferShader);
 		window->Update();
 	}
 

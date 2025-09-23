@@ -3,15 +3,16 @@
 
 #include "Common.h"
 #include "Window.h"
+#include "Shader.h"
 
 namespace LR 
 {
 	class Buffer 
 	{
 		public:
-			Buffer(const Window &window);
+			Buffer(const std::unique_ptr<Window> &window);
 			~Buffer();
-			void Render() const;
+			void Render(const RaytracingShader &raytracer, const RenderShader &bufferShader) const;
 		private:
 			unsigned int m_vbo;
 			unsigned int m_vao;

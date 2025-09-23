@@ -1,10 +1,10 @@
 #version 460 core
 layout (location = 0) in vec2 position;
+layout (location = 1) in vec2 textureCoordinates;
 
-out vec4 color;
+out vec2 oTextureCoordinates;
 
 void main() {
+	oTextureCoordinates = textureCoordinates;
 	gl_Position = vec4(position, 0.0, 1.0);
-
-	color = vec4( (position.x + 1.0)/2, (position.y + 1.0)/2, 1.0, 1.0);
 }

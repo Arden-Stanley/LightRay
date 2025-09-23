@@ -60,6 +60,12 @@ namespace LR
 		return shader;
 	}
 
+	void Shader::SetUniform(const std::string &name, int value) const
+	{
+		int shaderLocation = glGetUniformLocation(m_program, name.c_str());
+		glUniform1i(shaderLocation, value);
+	}
+
 	RenderShader::RenderShader(const std::string& vertexPath, const std::string& fragmentPath)
 	{
 		unsigned int vertexShader = m_LoadShader(vertexPath, VERTEX);

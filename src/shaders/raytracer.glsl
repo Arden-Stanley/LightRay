@@ -11,5 +11,5 @@ void main()
     value.x = float(texelCoord.x)/(gl_NumWorkGroups.x);
     value.y = float(texelCoord.y)/(gl_NumWorkGroups.y);
 	
-    imageStore(imgOutput, texelCoord, value);
+    imageStore(outputImage, texelCoord, value);
 }

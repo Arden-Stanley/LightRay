@@ -10,6 +10,8 @@ namespace LR {
 			~Window();
 			void Update() const;
 			bool IsRunning() const;
+			int getWidth() const;
+			int getHeight() const;
 		private:
 			int m_width, m_height;
 			std::string m_title;

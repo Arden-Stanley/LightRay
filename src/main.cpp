@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\raytracer.glsl"
 	);
 
-	LR::Buffer screenBuffer;
+	LR::Buffer screenBuffer();
 
 	while(window->IsRunning())
 	{

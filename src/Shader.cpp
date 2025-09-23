@@ -81,7 +81,13 @@ namespace LR
 
 	RaytracingShader::RaytracingShader(const std::string &computePath)
 	{
-	
+		unsigned int computeShader = m_LoadShader(computePath, COMPUTE);
+
+		m_program = glCreateProgram();
+		glAttachShader(m_program, computeShader);
+		glLinkProgram(m_program);
+
+		glDeleteShader(computeShader);
 	}
 	
 	RaytracingShader::~RaytracingShader() 

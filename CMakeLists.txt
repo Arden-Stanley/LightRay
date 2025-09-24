@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.3)
 
 project(LightRay)
 
-add_executable(lightray src/main.cpp src/Window.cpp)
+add_executable(lightray src/main.cpp src/Window.cpp src/Shader.cpp src/Buffer.cpp)
 
 add_executable(lightray src/Editor/UI.cpp)
 

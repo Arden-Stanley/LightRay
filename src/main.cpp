@@ -1,20 +1,30 @@
-/*
- * Description:
- * 	-At the minute using this main function to test out different parts of the raytracer.
- */
-
 #include "Window.h"
+#include "Shader.h"
+#include "Buffer.h"
+#include "Common.h"
 
-int main(int argc, char** argv) {
-	
-	//Creates a simple window.
-	LightRay::Window testWindow("test", 1000, 800);
-	
-	//Application main loop (happens every render).	
-	while (testWindow.IsRunning()) {
+int main(int argc, char** argv) 
+{
+	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(1000, 800, "Test");	
 
-		testWindow.Update();
+	LR::RenderShader bufferShader
+	(
+		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\vertex.glsl", 
+		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\fragment.glsl"
+	);
 
-	}	
+	LR::RaytracingShader rtShader
+	(
+		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\raytracer.glsl"
+	);
+
+	LR::Buffer screenBuffer(window);
+
+	while(window->IsRunning())
+	{
+		screenBuffer.Render(rtShader, bufferShader);
+		window->Update();
+	}
+
 	return 0;
 }

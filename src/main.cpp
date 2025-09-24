@@ -9,13 +9,13 @@ int main(int argc, char** argv)
 
 	LR::RenderShader bufferShader
 	(
-		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\vertex.glsl", 
-		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\fragment.glsl"
+		"../src/shaders/vertex.glsl",
+		"../src/shaders/fragment.glsl"
 	);
 
 	LR::RaytracingShader rtShader
 	(
-		"C:\\Users\\Arden Stanley\\source\\repos\\Arden-Stanley\\LightRay\\src\\shaders\\raytracer.glsl"
+	 	"../src/shaders/raytracer.glsl"
 	);
 
 	LR::Buffer screenBuffer(window);

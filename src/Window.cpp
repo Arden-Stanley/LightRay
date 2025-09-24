@@ -20,7 +20,7 @@ namespace LR {
 	{
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	bool Window::IsRunning() const 
@@ -28,12 +28,12 @@ namespace LR {
 		return !glfwWindowShouldClose(m_window);
 	}
 
-	int Window::getWidth() const 
+	int Window::GetWidth() const 
 	{
 		return m_width;
 	}
 
-	int Window::getHeight() const
+	int Window::GetHeight() const
 	{
 		return m_height;
 	}

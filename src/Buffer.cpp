@@ -6,25 +6,14 @@ namespace LR
 		: m_vbo(0), m_vao(0), m_width(window->GetWidth()), m_height(window->GetHeight()), m_texture(0)
 	{
 		float quad[] =
-		{
-			-1.0f,  1.0f,
-			-1.0f, -1.0f,
-			 1.0f, -1.0f,
+		{   //vertices        //texture coords
+			-1.0f,  1.0f,		0.0f,  1.0f,
+			-1.0f, -1.0f,		0.0f,  0.0f,
+			 1.0f, -1.0f,		1.0f,  0.0f,
 
-			 1.0f, -1.0f,
-			 1.0f,  1.0f,
-			-1.0f,  1.0f
-		};
-
-		float textureCoordinates[] =
-		{
-			 0.0f,  1.0f
-			 0.0f,  0.0f,
-			 1.0f,  0.0f,
-
-			
-			 1.0f,  1.0f,
-			 0.0f,  1.0f
+			 1.0f, -1.0f,		1.0f,  0.0f,
+			 1.0f,  1.0f,		1.0f,  1.0f,
+			-1.0f,  1.0f,		0.0f,  1.0f
 		};
 
 		glGenVertexArrays(1, &m_vao);
@@ -34,8 +23,11 @@ namespace LR
 		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
 
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
+
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)(2 * sizeof(float)));
+		glEnableVertexAttribArray(1);
 
 		glGenTextures(1, &m_texture);
 		glActiveTexture(GL_TEXTURE0);

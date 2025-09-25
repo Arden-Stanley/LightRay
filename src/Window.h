@@ -3,8 +3,10 @@
 
 #include "Common.h"
 
-namespace LR {
-	class Window {
+namespace LR 
+{
+	class Window 
+	{
 		public:
 			Window(int width, int height, const std::string &title);
 			~Window();

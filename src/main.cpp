@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv) 
 {
-	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(1000, 800, "Test");	
+	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(1000, 1000, "Test");	
 
 	const std::string SOURCE_DIRECTORY = std::string(SOURCE_DIR);
 	LR::RenderShader bufferShader

@@ -49,11 +49,12 @@ namespace LR
 	void Buffer::Render(const RaytracingShader &raytracer, const RenderShader &bufferShader) const
 	{
 		raytracer.Use();
+		raytracer.SetUniform1f("time", time(NULL));
 		glDispatchCompute((unsigned int) m_width, (unsigned int) m_height, 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
 		bufferShader.Use();
-		bufferShader.SetUniform("tex", 0);
+		bufferShader.SetUniform1i("tex", 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 		glBindVertexArray(m_vao);

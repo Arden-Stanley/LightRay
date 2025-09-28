@@ -40,17 +40,29 @@ bool check_hit_sphere(Sphere sphere, Ray ray)
 
 void main() 
 {
-	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
-    ivec2 size = imageSize(img);
-    float x = -(float(pixel_coords.x * 2 - size.x) / size.x);
-    float y = -(float(pixel_coords.y * 2 - size.y) / size.y);
 
     Camera camera;
     camera.center = vec3(0.0, 0.0, 0.0);
 
+	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 size = imageSize(img);
+    int viewport_width = 2.0;
+    int viewport_height = viewport_height * (double (size.x) / size.y);
+
+    int viewport_u = vec3(viewport_width, 0, 0);
+    int viewport_v = vec3(0, -viewport_height, 0);
+
+    int pixel_delta_u = viewport_u / imageSize.x;
+    int pixel_delta_v = viewport_v / imageSize.y;
+
+    int viewport_upper_left = camera.center - vec3(0, 0, 1.0) - viewport_u/2 - viewport_v/2;
+    int pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
+
+    int pixel_center = pixel00_loc + (pixel_coords.x * pixel_delta_u) + (pixel_coords.y * pixel_delta_v);
+
     Ray ray;
     ray.origin = camera.center;
-    ray.dir = (vec3(x, y, 0.0) - vec3(0.0, 0.0, 1.0)) - camera.center;
+    ray.dir = pixel_center - camera.center;
 
     Sphere sphere;
     sphere.center = vec3(0.0, 0.0, 5.0);

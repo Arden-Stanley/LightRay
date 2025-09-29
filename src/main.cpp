@@ -49,13 +49,23 @@ int main(int argc, char** argv)
 		ImGui::NewFrame();
 
 		ImGui::Begin("Light-Ray Editor");
+		ImGui::SliderFloat("Light Intensity", &lightIntensity, 0.0f, 10.0f);
 		//ADD TO SCENE LOGIC HERE
 		if (ImGui::Button("Add Sphere")) {
 			// add scene reset logic
 		}
+		ImGui::Checkbox("Show Debug Info", &showDebug);
+		ImGui::End();
 
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	}
+
+	//ImGui Cleanup
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	return 0;
 }

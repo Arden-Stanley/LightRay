@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Buffer.h"
 #include "Common.h"
+#include "scene.h"
 
 //ImGui Headers
 #include "imgui.h"
@@ -49,12 +50,18 @@ int main(int argc, char** argv)
 		ImGui::NewFrame();
 
 		ImGui::Begin("Light-Ray Editor");
-		ImGui::SliderFloat("Light Intensity", &lightIntensity, 0.0f, 10.0f);
+
 		//ADD TO SCENE LOGIC HERE
-		if (ImGui::Button("Add Sphere")) {
-			// add scene reset logic
+		if (ImGui::Button("Reset Scene")) {
+			scene.Reset();
 		}
-		ImGui::Checkbox("Show Debug Info", &showDebug);
+		if (ImGui::Button("Add Sphere")) {
+			scene.AddSphere();
+		}
+		ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
+		ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
+
+		//ImGui::Checkbox("Show Debug Info", &showDebug);
 		ImGui::End();
 
 		ImGui::Render();

@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 		ImGui::Begin("Light-Ray Editor");
 		//ADD TO SCENE LOGIC HERE
 		if (ImGui::Button("Add Sphere")) {
-			// TODO: Hook this into your scene logic
+			// add scene reset logic
 		}
 
 

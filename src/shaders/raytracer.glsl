@@ -57,7 +57,7 @@ void main()
     float x = -(float(pixel_coords.x * 2 - size.x) / size.x);
     float y = -(float(pixel_coords.y * 2 - size.y) / size.y);
     
-    /*float viewport_height = 2.0;
+    float viewport_height = 2.0;
     float viewport_width = viewport_height * (float(size.x) / size.y);
 
     vec3 viewport_u = vec3(viewport_width, 0, 0);
@@ -70,7 +70,7 @@ void main()
     vec3 pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
     vec3 pixel_center = pixel00_loc + (pixel_coords.x * pixel_delta_u) + (pixel_coords.y * pixel_delta_v);
-    */
+    
 
 
     Sphere sphere;
@@ -78,14 +78,14 @@ void main()
     sphere.center = vec3(0.0, 0.0, -1.0);
     sphere.radius = 1.0;
 
-    int samples = 1000;
+    int samples = 100;
 
     vec4 pixel = vec4(0.0, 0.0, 0.0, 1.0);
     for (int i = 0; i < samples; i++)
     {
         vec3 offset = 
         vec3(
-            get_random(time * vec2(x, y) * 30 * i) - 0.5, 
+            get_random(time * vec2(x, y) * 300 * i) - 0.5, 
             get_random(time * vec2(x, y) * 200 * i) - 0.5, 
             0.0
         );

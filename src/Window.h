@@ -14,6 +14,7 @@ namespace LR
 			bool IsRunning() const;
 			int GetWidth() const;
 			int GetHeight() const;
+			GLFWwindow* GetGLFWWindow() const;
 		private:
 			int m_width, m_height;
 			std::string m_title;

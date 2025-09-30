@@ -38,4 +38,9 @@ namespace LR
 	{
 		return m_height;
 	}
+
+	GLFWwindow* Window::GetGLFWWindow() const 
+	{
+		return m_window;
+	}
 }

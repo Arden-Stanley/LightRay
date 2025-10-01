@@ -3,7 +3,6 @@
 #include "Buffer.h"
 #include "Common.h"
 #include "scene.h"
-
 //ImGui Headers
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -41,11 +40,16 @@ int main(int argc, char** argv)
 	static bool showDebug = true;
 
 	Scene scene;
-
+	
+	float last_frame = 0.0;
+	float current_frame = 0.0;
+	float render_time = 0.0;
 	while(window->IsRunning())
-	{
+	{	
 		window->Update();
-
+		
+		
+		
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

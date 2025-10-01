@@ -9,5 +9,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <time.h>
+#include <chrono>
 
 #endif

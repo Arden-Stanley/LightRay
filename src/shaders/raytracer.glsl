@@ -90,7 +90,7 @@ void main()
     Camera camera;
     camera.center = vec3(0.0, 0.0, 0.0);
 
-	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
     ivec2 size = imageSize(img);
     
     float viewport_height = 2.0;

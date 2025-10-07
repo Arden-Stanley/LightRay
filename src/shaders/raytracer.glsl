@@ -29,31 +29,7 @@ float get_random(vec2 seed)
     return fract(sin(dot(seed.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
-vec4 check_hit_sphere(Sphere sphere, Ray ray)
-{
-    vec3 difference = sphere.center - ray.origin;
-    float a = dot(ray.dir, ray.dir);
-    float b = dot(ray.dir, difference);
-    float c = dot(difference, difference) - (sphere.radius * sphere.radius);
-    float discriminant = (b * b) - (a * c);
-    if (discriminant < 0)
-    {
-        return vec4(0.2, 0.2, 0.2, 1.0);
-    }
-    float root = (b - sqrt(discriminant)) / a;
-    if (root <= 1.0 || root >= 100000)
-    {
-        root = (b + sqrt(discriminant)) / a;
-        if (root <= 1.0 || root >= 100000) 
-        {
-            return vec4(0.2, 0.2, 0.2, 1.0);
-        }
-    }
-
-    return sphere.color;
-}
-
-vec4 check_hit_sphere_normal(Sphere sphere, Ray ray)
+int check_hit_sphere(Sphere sphere, Ray ray)
 {
     vec3 difference = sphere.center - ray.origin;
     float a = dot(ray.dir, ray.dir);
@@ -62,26 +38,20 @@ vec4 check_hit_sphere_normal(Sphere sphere, Ray ray)
     float discriminant = (b * b) - (a * c);
     if (discriminant <= 0)
     {
-        return vec4(0.2, 0.2, 0.2, 1.0);
+        return -1;
     }
     float root = (b - sqrt(discriminant)) / a;
-    if (root <= 0.1 || root >= 10000)
+    /*if (root <= 0.1 || root >= 10000)
     {
         root = (b + sqrt(discriminant)) / a;
         if (root <= 0.1 || root >= 10000) 
         {
-            return vec4(0.2, 0.2, 0.2, 1.0);
+            return false;    
         }
     }
-
-    float t = root;
-    if (t == 0)
-    {
-	return vec4(0.2, 0.2, 0.2, 1.0);
-    }
-    vec3 point = root * ray.dir;
-    vec3 normal = (point - sphere.center) / sphere.radius;
-    return vec4(normal, 1.0);
+    */
+    
+    return true;
 }
 
 void main() 
@@ -137,11 +107,18 @@ void main()
         sample_ray.origin = camera.center;
         sample_ray.dir = sample_pixel - sample_ray.origin;
 
-        //pixel = pixel + check_hit_sphere(ground, sample_ray);
-
-        vec4 normal = check_hit_sphere_normal(sphere, sample_ray);
-        pixel = pixel + 0.5 * vec4(normal.x + 1, normal.y + 1, normal.z + 1, 2.0);
-        //pixel = pixel + check_hit_sphere();
+        if (check_hit_sphere_normal(sphere, sample_ray))
+        {
+            pixel += vec4(1.0, 0.0, 0.0, 1.0);
+        }
+        else if (check_hit_sphere_normal(ground, sample_ray))
+        {
+            pixel += vec4(0.0, 1.0, 0.0, 1.0);
+        }
+        else 
+        {
+            pixel += vec4(0.1, 0.1, 0.1, 1.0);
+        }
     }
 
     pixel = pixel / samples;

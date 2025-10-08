@@ -41,9 +41,6 @@ int main(int argc, char** argv)
 
 	Scene scene;
 	
-	float last_frame = 0.0;
-	float current_frame = 0.0;
-	float render_time = 0.0;
 	while(window->IsRunning())
 	{	
 		window->Update();

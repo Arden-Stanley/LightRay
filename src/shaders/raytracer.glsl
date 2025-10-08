@@ -5,79 +5,71 @@ layout (rgba32f, binding = 0) uniform image2D img;
 
 uniform float time;
 
-struct Ray 
-{
-    vec3 origin;
-    vec3 dir;
+struct Ray {
+    vec3 origin, dir;
 };
 
-struct Camera
-{
+struct Camera {
     vec3 center;
     float fov;
 };
 
-struct Sphere 
-{
+struct Viewport {
+    float width, height;
+    vec3 u, v, du, dv, upperLeft, center;
+};
+
+struct Sphere {
     vec4 color;
     vec3 center;
     float radius;
 };
 
-float get_random(vec2 seed)
-{
+float getRandom(vec2 seed) {
     return fract(sin(dot(seed.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
-int check_hit_sphere(Sphere sphere, Ray ray)
-{
-    vec3 difference = sphere.center - ray.origin;
-    float a = dot(ray.dir, ray.dir);
-    float b = dot(ray.dir, difference);
-    float c = dot(difference, difference) - (sphere.radius * sphere.radius);
-    float discriminant = (b * b) - (a * c);
-    if (discriminant <= 0)
-    {
-        return -1;
-    }
-    float root = (b - sqrt(discriminant)) / a;
-    /*if (root <= 0.1 || root >= 10000)
-    {
-        root = (b + sqrt(discriminant)) / a;
-        if (root <= 0.1 || root >= 10000) 
-        {
-            return false;    
-        }
-    }
-    */
-    
-    return true;
+Ray getSampleRay(int seed, Viewport vp, ivec2 pixelCoords) {
+    vec3 offset =  
+        vec3(
+            getRandom(time * pixelCoords * seed) - 0.5, 
+            getRandom(time * pixelCoords * seed) - 0.5, 
+            0.0
+        );
+        vec3 samplePixel = vp.center + ((pixelCoords.x + offset.x) * vp.dv)
+                                        + ((pixelCoords.y + offset.y) * vp.dv);
+
+        Ray sampleRay;
+        sampleRay.origin = vp.center;
+        sampleRay.dir = samplePixel - sampleRay.origin;
+
+        return sampleRay;
 }
 
-void main() 
-{
+float getSphereHit() {
+    
+}
+
+void main() {
 
     Camera camera;
     camera.center = vec3(0.0, 0.0, 0.0);
 
-    ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 pixelCoords = ivec2(gl_GlobalInvocationID.xy);
     ivec2 size = imageSize(img);
+
+    Viewport vp;
     
-    float viewport_height = 2.0;
-    float viewport_width = viewport_height * (float(size.x) / size.y);
+    vp.height = 2.0;
+    vp.width = vp.height * (float(size.x) / size.y);
 
-    vec3 viewport_u = vec3(viewport_width, 0, 0);
-    vec3 viewport_v = vec3(0, -viewport_height, 0);
+    vp.u = vec3(vp.width, 0, 0);
+    vp.v = vec3(0, -vp.height, 0);
 
-    vec3 pixel_delta_u = viewport_u / size.x;
-    vec3 pixel_delta_v = viewport_v / size.y;
- 
-    vec3 viewport_upper_left = camera.center - vec3(0, 0, 1.0) - viewport_u/2 - viewport_v/2;
-    vec3 pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
-
-    //vec3 pixel_center = pixel00_loc + (pixel_coords.x * pixel_delta_u) + (pixel_coords.y * pixel_delta_v);
-    
-
+    vp.du = vp.u / size.x;
+    vp.dv = vp.v / size.y;
+    vp.upperLeft = camera.center - vec3(0, 0, 1.0) - vp.u/2 - vp.v/2;
+    vp.center = vp.upperLeft + 0.5 * (vp.du + vp.dv);    
 
     Sphere sphere;
     sphere.color = vec4(0.0, 1.0, 1.0, 1.0);
@@ -91,37 +83,12 @@ void main()
 
     int samples = 100;
 
-    vec4 pixel = vec4(0.0, 0.0, 0.0, 1.0);
-    for (int i = 0; i < samples; i++)
-    {
-        vec3 offset = 
-        vec3(
-            get_random(time * pixel_coords * 300 * i) - 0.5, 
-            get_random(time * pixel_coords * 200 * i) - 0.5, 
-            0.0
-        );
-        vec3 sample_pixel = pixel00_loc + ((pixel_coords.x + offset.x) * pixel_delta_u)
-                                        + ((pixel_coords.y + offset.y) * pixel_delta_v);
-
-        Ray sample_ray;
-        sample_ray.origin = camera.center;
-        sample_ray.dir = sample_pixel - sample_ray.origin;
-
-        if (check_hit_sphere_normal(sphere, sample_ray))
-        {
-            pixel += vec4(1.0, 0.0, 0.0, 1.0);
-        }
-        else if (check_hit_sphere_normal(ground, sample_ray))
-        {
-            pixel += vec4(0.0, 1.0, 0.0, 1.0);
-        }
-        else 
-        {
-            pixel += vec4(0.1, 0.1, 0.1, 1.0);
-        }
+    vec4 pixelColor = vec4(0.0, 0.0, 0.0, 1.0);
+    for (int i = 0; i < samples; i++) {
+        Ray sampleRay = getSampleRay(i * 100, vp, pixelCoords);
     }
 
-    pixel = pixel / samples;
+    pixelColor = pixelColor / samples;
 
-    imageStore(img, pixel_coords, pixel);
+    imageStore(img, pixelCoords, pixelColor);
 }

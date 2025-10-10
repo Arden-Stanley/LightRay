@@ -1,26 +1,27 @@
-#pragma once
-#include <vector>
+#ifndef SCENE_H
+#define SCENE_H
 
-struct Sphere {
-    float x, y, z;
-    float radius;
-};
+#include "Common.h"
 
-class Scene 
-{
-    public:
-        float fieldOfView = 45.0f;
-        int rayDepth = 2;
-        std::vector<Sphere> spheres;
-        Scene() = default;
+namespace LR {
+    class Sphere {
+        public:
+            Sphere(const Vec3 &position, float radius);
+            ~Sphere();
+        private:
+            Vec3 m_position;
+            float m_radius;
+    };
 
-        void Reset() {
-            spheres.clear();
-            fieldOfView = 45.0f;
-            rayDepth = 2;
-        }
+    class Scene {
+        public:
+            Scene();
+            ~Scene();
+            void AddObject(const Sphere &sphere);
+            void Render() const;
+        private:
+            std::vector<Sphere> _objects;
+    };
+}
 
-        void AddSphere(float x = 0.0f, float y = 0.0f, float z = -5.0f, float radius = 1.0f) {
-            spheres.push_back({ x, y, z, radius });
-        }
-};
+#endif

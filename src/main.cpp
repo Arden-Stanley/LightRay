@@ -2,7 +2,6 @@
 #include "Shader.h"
 #include "Buffer.h"
 #include "Common.h"
-#include "scene.h"
 //ImGui Headers
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -38,14 +37,10 @@ int main(int argc, char** argv)
 
 	static float lightIntensity = 1.0f;
 	static bool showDebug = true;
-
-	Scene scene;
 	
 	while(window->IsRunning())
 	{	
 		window->Update();
-		
-		
 		
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -60,9 +55,9 @@ int main(int argc, char** argv)
 		if (ImGui::Button("Add Sphere")) {
 			//scene.AddSphere();
 		}
-		ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
-		ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
-		ImGui::Checkbox("Show Debug Info", &showDebug);
+		//ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
+		//ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
+		//ImGui::Checkbox("Show Debug Info", &showDebug);
 		ImGui::End();
 
 		screenBuffer->Render(rtShader, bufferShader);

@@ -29,6 +29,27 @@ float getRandom(vec2 seed) {
     return fract(sin(dot(seed.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
+vec3 getRandomOnHemi(vec3 normal) {
+    vec3 randOnSphere;
+    while (true) {
+        vec3 p = vec3(
+            (getRandom(gl_GlobalInvocationID.xy * 102) + 1.0) / 2.0, 
+            (getRandom(gl_GlobalInvocationID.xy * 232) + 1.0) / 2.0, 
+            (getRandom(gl_GlobalInvocationID.xy * 827) + 1.0) / 2.0
+        );
+        float lengthSqrd = p.x * p.x + p.y * p.y + p.z * p.z;
+        if (1e-160 < lengthSqrd && lengthSqrd <= 1)
+            randOnSphere =  p / sqrt(lengthSqrd);
+            break;
+    }
+    if (dot(randOnSphere, normal) > 0.0) {
+        return randOnSphere;
+    }
+    else {
+        return -randOnSphere;
+    }
+}
+
 //returns t value (intersection scalar)
 float getSphereHit(Ray ray, Sphere sphere) {
     vec3 offset = ray.origin - sphere.center;
@@ -67,7 +88,16 @@ vec3 getSurfaceNormal(Ray ray, Sphere sphere, float t) {
     }
 }
 
-
+vec4 getRayColor(Ray ray, Sphere sphere) {
+    float t = getSphereHit(ray, sphere);
+    if (t != -1) {
+        vec3 direction = getRandomOnHemi(getSurfaceNormal(ray, sphere, t));
+        return 1.0 * getRayColor(Ray(ray.origin + t * ray.dir, direction), sphere);
+    }
+    else {
+        return vec4(1.0, 0.0, 1.0, 1.0);
+    }
+}
 
 void main() {
 
@@ -96,7 +126,7 @@ void main() {
     int samples = 4;
 
 
-    vec4 pixelColor = vec4(0.0, 0.0, 1 - float(pixelCoords.y) / float(size.y), 1.0);
+    vec4 pixelColor = vec4(0.0, 0.0, 0.0, 1.0);
 
     vec3 targetPixel = vp.firstPixel + (pixelCoords.x * vp.du) + (pixelCoords.y * vp.dv);
 
@@ -104,10 +134,26 @@ void main() {
 
     
     //RENDER SURFACE NORMALS AS COLOR
+    /*
     vec3 normal = getSurfaceNormal(ray, sphere, getSphereHit(ray, sphere));
     if (normal != vec3(0, 0, 0)) {
         pixelColor = vec4(normal, 2.0);
     }
+    */
+    float t
+    while (1) {
+        t = getSphereHit(ray, sphere);
+        if (t != -1) {
+            vec3 direction = getRandomOnHemi(getSurfaceNormal(ray, sphere, t));
+
+        }
+        else {
+            pixelColor = vec4(1.0, 0.0, 1.0, 1.0);
+        }
+    }
+
+
+    pixelColor = getRayColor(ray, sphere);
     
     
 

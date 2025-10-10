@@ -56,8 +56,7 @@ float getSphereHit(Ray ray, Sphere sphere) {
     }
 }
 
-vec3 getSurfaceNormal(Ray ray, Sphere sphere) {
-    float t = getSphereHit(ray, sphere);
+vec3 getSurfaceNormal(Ray ray, Sphere sphere, float t) {
     if (t != -1) {
         vec3 p = ray.origin + t * ray.dir;
         vec3 normal = (p - sphere.center) / sphere.radius;
@@ -91,15 +90,8 @@ void main() {
     vp.upperLeft = camera.center - vec3(0, 0, 1.0) - vp.u/2 - vp.v/2;
     vp.firstPixel = vp.upperLeft + 0.5 * (vp.du + vp.dv);    
 
-    Sphere sphere;
-    sphere.color = vec4(0.0, 1.0, 1.0, 1.0);
-    sphere.center = vec3(0.0, 0.0, -2.0);
-    sphere.radius = 1.0;
-
-    Sphere ground;
-    ground.color = vec4(0.0, 1.0, 0.0, 1.0);
-    ground.center = vec3(0.0, 100.5, -1.0);
-    ground.radius = 100;
+    Sphere sphere = Sphere(vec4(0.0, 1.0, 1.0, 1.0), vec3(0.0, 0.0, -2.0), 1.0);
+    Sphere ground = Sphere(vec4(0.0, 1.0, 0.0, 1.0), vec3(0.0, 100.5, -1.0), 100.0);
 
     int samples = 4;
 
@@ -107,28 +99,17 @@ void main() {
     vec4 pixelColor = vec4(0.0, 0.0, 1 - float(pixelCoords.y) / float(size.y), 1.0);
 
     vec3 targetPixel = vp.firstPixel + (pixelCoords.x * vp.du) + (pixelCoords.y * vp.dv);
-    /*
-    for (int i = 0; i < samples; i++) {
-        Ray sample_ray = get_sample_ray(i * 100, vp, pixel_coords);
-        if (get_sphere_hit(sample_ray, sphere) != -1) {
-            pixel_color += sphere.color;
-        }
-    }
 
-    pixel_color = pixel_color / samples;
-    */
+    Ray ray = Ray(camera.center, targetPixel - camera.center);  
 
-    Ray ray;
-    ray.origin = camera.center;
-    ray.dir = targetPixel - camera.center;
-
-    /*
+    
     //RENDER SURFACE NORMALS AS COLOR
-    vec3 normal = getSurfaceNormal(ray, sphere);
+    vec3 normal = getSurfaceNormal(ray, sphere, getSphereHit(ray, sphere));
     if (normal != vec3(0, 0, 0)) {
-        pixelColor = vec4(normal, 1.0);
+        pixelColor = vec4(normal, 2.0);
     }
-    */ 
+    
+    
 
     imageStore(img, pixelCoords, pixelColor);
 }

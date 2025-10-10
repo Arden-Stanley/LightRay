@@ -29,6 +29,11 @@ float getRandom(vec2 seed) {
     return fract(sin(dot(seed.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
+vec3 getUnitVec3(vec3 v) {
+    vec3 unitVec = v / (sqrt(v.x * v.x + v.y * v.y + v.z + v.z));
+    return unitVec;
+}
+
 vec3 getRandomOnHemi(vec3 normal) {
     vec3 randOnSphere;
     while (true) {
@@ -88,21 +93,12 @@ vec3 getSurfaceNormal(Ray ray, Sphere sphere, float t) {
     }
 }
 
-vec4 getRayColor(Ray ray, Sphere sphere) {
-    float t = getSphereHit(ray, sphere);
-    if (t != -1) {
-        vec3 direction = getRandomOnHemi(getSurfaceNormal(ray, sphere, t));
-        return 1.0 * getRayColor(Ray(ray.origin + t * ray.dir, direction), sphere);
-    }
-    else {
-        return vec4(1.0, 0.0, 1.0, 1.0);
-    }
-}
-
 void main() {
 
     Camera camera;
     camera.center = vec3(0.0, 0.0, 0.0);
+
+    int rayDepth = 4;
 
     ivec2 pixelCoords = ivec2(gl_GlobalInvocationID.xy);
     ivec2 size = imageSize(img);
@@ -123,8 +119,6 @@ void main() {
     Sphere sphere = Sphere(vec4(0.0, 1.0, 1.0, 1.0), vec3(0.0, 0.0, -2.0), 1.0);
     Sphere ground = Sphere(vec4(0.0, 1.0, 0.0, 1.0), vec3(0.0, 100.5, -1.0), 100.0);
 
-    int samples = 4;
-
 
     vec4 pixelColor = vec4(0.0, 0.0, 0.0, 1.0);
 
@@ -140,20 +134,34 @@ void main() {
         pixelColor = vec4(normal, 2.0);
     }
     */
-    float t
-    while (1) {
+    float t;
+    vec3 unitVec = getUnitVec3(ray.dir);
+
+    for (int i = 0; i < rayDepth; i++) {
         t = getSphereHit(ray, sphere);
         if (t != -1) {
             vec3 direction = getRandomOnHemi(getSurfaceNormal(ray, sphere, t));
-
+            ray.origin = t * ray.dir;
+            ray.dir = direction;
+            pixelColor += vec4(0.0, 1.0, 0.0, 1.0);
         }
         else {
-            pixelColor = vec4(1.0, 0.0, 1.0, 1.0);
+            float a = 0.5 * (unitVec.y + 1.0);
+            vec4 color = (1.0 - a) * vec4(1.0, 1.0, 1.0, 1.0) + a * vec4(0.0, 0.0, 1.0, 1.0);
+
+            if (i != 0) {
+                pixelColor += color;
+                pixelColor = pixelColor / rayDepth;
+            }
+            else {
+                pixelColor = color;
+            }
+            break;
         }
     }
 
 
-    pixelColor = getRayColor(ray, sphere);
+    //pixelColor = getRayColor(ray, sphere);
     
     
 

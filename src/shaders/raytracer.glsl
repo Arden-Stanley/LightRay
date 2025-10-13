@@ -33,7 +33,7 @@ float getRandom(vec2 seed) {
 }
 
 vec3 getUnitSphere() {
-    int i = 100;
+    int i = 1;
     while (true) {
         vec3 p = vec3(
             (getRandom(pixelCoords.xy * 102 * i * time) * 2.0) - 1.0, 
@@ -42,13 +42,14 @@ vec3 getUnitSphere() {
         );
         i += 1;
         float lengthSqrd = dot(p, p);
-        if (lengthSqrd <= 1.0) {
+        //if (lengthSqrd > 1e-160 && lengthSqrd <= 1.0) {
             return (p / sqrt(lengthSqrd));
-        }
+        //}
     }
 }
 
-vec3 getRandomOnHemi(vec3 normal) {
+vec3 getRandomOnHemi(Ray ray, float t, vec3 normal) {
+    
     vec3 randOnSphere = getUnitSphere();
     if (dot(randOnSphere, normal) > 0.0) {
         return randOnSphere;
@@ -82,7 +83,7 @@ float getSphereHit(Ray ray, Sphere sphere, float tMin, float tMax) {
 
 vec3 getSurfaceNormal(Ray ray, Sphere sphere, float t) {
     vec3 p = ray.origin + t * ray.dir;
-    vec3 normal = normalize(p - sphere.center); // sphere.radius;
+    vec3 normal = (p - sphere.center)/sphere.radius;
     return normal;
 }
 
@@ -92,19 +93,21 @@ vec4 getPixelColor(Ray ray, Sphere sphere, Sphere ground, int rayDepth, vec4 bac
     float scalar = 1.0;
 
     for (int i = 0; i < rayDepth; i++) {
-        float tSphere = getSphereHit(currentRay, sphere, 0, 10000);
-        float tGround = getSphereHit(currentRay, ground, 0, 10000);
+        float tSphere = getSphereHit(currentRay, sphere, 0.0, 10000);
+        float tGround = getSphereHit(currentRay, ground, 0.0, 10000);
         if (tSphere != -1) {
             scalar = scalar * 0.5;
             normal = getSurfaceNormal(currentRay, sphere, tSphere);
+            vec3 randomVector = getRandomOnHemi(currentRay, tSphere, normal);
             currentRay.origin = currentRay.origin + (currentRay.dir * tSphere);
-            currentRay.dir = getRandomOnHemi(normal);
+            currentRay.dir = randomVector;
         }
         else if (tGround != -1) {
-            scalar = scalar * 0.2;
+            scalar = scalar * 0.5;
             normal = getSurfaceNormal(currentRay, ground, tGround);
+            vec3 randomVector = getRandomOnHemi(currentRay, tGround, normal);
             currentRay.origin = currentRay.origin + (currentRay.dir * tGround);
-            currentRay.dir = getRandomOnHemi(normal);
+            currentRay.dir = randomVector;
         }
         else {
             return (background * vec4(scalar, scalar, scalar, 1.0));
@@ -142,7 +145,7 @@ void main() {
 
     Ray ray = Ray(camera.center, targetPixel - camera.center);  
     
-    vec4 pixelColor = getPixelColor(ray, sphere, ground, 4, vec4(0.2, 0.4, 0.9, 1.0));
+    vec4 pixelColor = getPixelColor(ray, sphere, ground, 10, vec4(0.2, 0.4, 0.9, 1.0));
 
     
     ivec2 pixelLoc = ivec2(gl_GlobalInvocationID.xy);

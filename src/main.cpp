@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Buffer.h"
 #include "Common.h"
+#include "EventSystem.h"
 //ImGui Headers
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -26,6 +27,8 @@ int main(int argc, char** argv)
 
 	std::unique_ptr<LR::Buffer> screenBuffer = std::make_unique<LR::Buffer>(window);
 
+	LR::EventSystem eventSystem(window.get());
+
 	//ImGui Initialization
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -37,9 +40,18 @@ int main(int argc, char** argv)
 
 	static float lightIntensity = 1.0f;
 	static bool showDebug = true;
+
+	float lastFrame = 0.0f;
+	float deltaTime = 0.0f;
 	
 	while(window->IsRunning())
 	{	
+		float currentFrame = static_cast<float>(glfwGetTime());
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		eventSystem.processInput(deltaTime);
+
 		window->Update();
 		
 		ImGui_ImplOpenGL3_NewFrame();

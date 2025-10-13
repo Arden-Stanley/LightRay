@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <GLFW/glfw3.h>
 
 namespace LR 
 {
@@ -42,5 +43,9 @@ namespace LR
 	GLFWwindow* Window::GetGLFWWindow() const 
 	{
 		return m_window;
+	}
+	bool Window::IsKeyPressed(int key) const 
+	{
+		return glfwGetKey(m_window, key) == GLFW_PRESS;
 	}
 }

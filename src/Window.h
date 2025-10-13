@@ -15,6 +15,7 @@ namespace LR
 			int GetWidth() const;
 			int GetHeight() const;
 			GLFWwindow* GetGLFWWindow() const;
+			bool IsKeyPressed(int key) const;
 		private:
 			int m_width, m_height;
 			std::string m_title;

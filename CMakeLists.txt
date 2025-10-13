@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 4.1)
 
 project(LightRay)
 
-add_executable(lightray src/main.cpp src/Shader.cpp src/Window.cpp src/Buffer.cpp src/Scene.cpp)
+add_executable(lightray src/main.cpp src/Shader.cpp src/Window.cpp src/Buffer.cpp src/Scene.cpp src/EventSystem.cpp)
 
 target_compile_definitions(lightray PUBLIC SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 

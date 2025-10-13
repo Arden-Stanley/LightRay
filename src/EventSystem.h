@@ -1,7 +1,7 @@
 #pragma once
 #include "Window.h"
 #include "Common.h"
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
 
 namespace LR 
 {
@@ -18,7 +18,7 @@ namespace LR
 			void GetMousePosition(double& x, double& y) const;
 
 			float moveSpeed;
-			glm::vec3 cameraPosition;
+			//glm::vec3 cameraPosition;
 		private:
 			Window* window;
 	};

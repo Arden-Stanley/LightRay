@@ -4,8 +4,10 @@
 
 namespace LR 
 {
-	EventSystem::EventSystem(Window* window) : window(window), cameraPosition(0.0f, 0.0f, 0.0f) {}
+	EventSystem::EventSystem(Window* window) : window(window) /*cameraPosition(0.0f, 0.0f, 0.0f)*/ {}
+
 	EventSystem::~EventSystem() {}
+
 	void EventSystem::processInput(float deltaTime)
 	{
 		// Exit program with the ESC key
@@ -14,7 +16,8 @@ namespace LR
 			glfwSetWindowShouldClose(window->GetGLFWWindow(), true);
 		}
 		moveSpeed = 5.0f * deltaTime;
-		// Camera controls
+		/*
+		Camera controls
 		if (IsKeyPressed(GLFW_KEY_W))
 			cameraPosition.z -= moveSpeed;
 		if (IsKeyPressed(GLFW_KEY_S))
@@ -23,7 +26,7 @@ namespace LR
 			cameraPosition.x -= moveSpeed;
 		if (IsKeyPressed(GLFW_KEY_D))
 			cameraPosition.x += moveSpeed;
-
+		*/
 	}
 	bool EventSystem::IsKeyPressed(int key) const 
 	{

@@ -5,151 +5,61 @@ layout (rgba32f, binding = 0) uniform image2D img;
 
 uniform float time;
 
-vec2 pixelCoords = vec2(float(gl_GlobalInvocationID.x), float(gl_GlobalInvocationID.y));
-
-
 struct Ray {
-    vec3 origin, dir;
-};
-
-struct Camera {
-    vec3 center;
-    float fov;
-};
-
-struct Viewport {
-    float width, height;
-    vec3 u, v, du, dv, upperLeft, firstPixel;
+    vec3 origin;
+    vec3 direction;
+    vec3 hit;
+    float t;
 };
 
 struct Sphere {
-    vec4 color;
     vec3 center;
     float radius;
 };
 
-float getRandom(vec2 seed) {
-    return fract(sin(dot(seed.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-}
+struct Camera {
+    vec3 center;
+    float focalLength;
+};
 
-vec3 getUnitSphere() {
-    int i = 1;
-    while (true) {
-        vec3 p = vec3(
-            (getRandom(pixelCoords.xy * 102 * i * time) * 2.0) - 1.0, 
-            (getRandom(pixelCoords.xx * 300 * i * time) * 2.0) - 1.0, 
-            (getRandom(pixelCoords.yy * 827 * i * time) * 2.0) - 1.0
-        );
-        i += 1;
-        float lengthSqrd = dot(p, p);
-        //if (lengthSqrd > 1e-160 && lengthSqrd <= 1.0) {
-            return (p / sqrt(lengthSqrd));
-        //}
-    }
-}
+bool getSphereHit(inout Ray ray, in Sphere sphere) {
+    vec3 oc = ray.origin - sphere.center;
+    float a = dot(ray.direction, ray.direction);
+    float s = dot(ray.direction, oc);
+    float c = dot(oc, oc) - (sphere.radius * sphere.radius);
 
-vec3 getRandomOnHemi(Ray ray, float t, vec3 normal) {
-    
-    vec3 randOnSphere = getUnitSphere();
-    if (dot(randOnSphere, normal) > 0.0) {
-        return randOnSphere;
+    float delta = s * s - (c);
+    float d = -s - sqrt(delta);
+
+    if (delta < 0.0) {
+        return false;
     }
     else {
-        return -randOnSphere;
+        return true;
     }
-}
-
-//returns t value (intersection scalar)
-float getSphereHit(Ray ray, Sphere sphere, float tMin, float tMax) {
-    vec3 offset = ray.origin - sphere.center;
-    float a = dot(ray.dir, ray.dir);
-    float b = dot(offset, ray.dir);
-    float c = dot(offset, offset) - (sphere.radius * sphere.radius);
-    float discriminant = (b * b) - (a * c);
-
-    if (discriminant > 0) {
-        float temp = (-b - sqrt(discriminant)) / a;
-        if (temp < tMax && temp > tMin) {
-            return temp;
-        }
-        temp = (-b + sqrt(discriminant)) / a;
-        if (temp < tMax && temp > tMin) {
-            return temp;
-        }
-    }
-    
-    return -1;
-}
-
-vec3 getSurfaceNormal(Ray ray, Sphere sphere, float t) {
-    vec3 p = ray.origin + t * ray.dir;
-    vec3 normal = (p - sphere.center)/sphere.radius;
-    return normal;
-}
-
-vec4 getPixelColor(Ray ray, Sphere sphere, Sphere ground, int rayDepth, vec4 background) {
-    Ray currentRay = ray;
-    vec3 normal;
-    float scalar = 1.0;
-
-    for (int i = 0; i < rayDepth; i++) {
-        float tSphere = getSphereHit(currentRay, sphere, 0.0, 10000);
-        float tGround = getSphereHit(currentRay, ground, 0.0, 10000);
-        if (tSphere != -1) {
-            scalar = scalar * 0.5;
-            normal = getSurfaceNormal(currentRay, sphere, tSphere);
-            vec3 randomVector = getRandomOnHemi(currentRay, tSphere, normal);
-            currentRay.origin = currentRay.origin + (currentRay.dir * tSphere);
-            currentRay.dir = randomVector;
-        }
-        else if (tGround != -1) {
-            scalar = scalar * 0.5;
-            normal = getSurfaceNormal(currentRay, ground, tGround);
-            vec3 randomVector = getRandomOnHemi(currentRay, tGround, normal);
-            currentRay.origin = currentRay.origin + (currentRay.dir * tGround);
-            currentRay.dir = randomVector;
-        }
-        else {
-            return (background * vec4(scalar, scalar, scalar, 1.0));
-        }
-    }
-    return (background * vec4(scalar, scalar, scalar, 1.0));
 }
 
 void main() {
+    ivec2 pixelLoc = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 screenDims = imageSize(img);
+
+    vec4 pixelColor = vec4(0.2, 0.5, 0.8, 1.0);
 
     Camera camera;
-    camera.center = vec3(0.0, 0.0, 0.0);
+    camera.center = vec3(0.0, 0.0, 1.0);
 
-    ivec2 size = imageSize(img);
+    Sphere sphere;
+    sphere.center = vec3(0.0, 0.0, -5.0);
+    sphere.radius = 1.0;
 
-    Viewport vp;
-    
-    vp.height = 2.0;
-    vp.width = vp.height * (float(size.x) / size.y);
+    Ray ray;
+    ray.origin = vec3(0, 0, 0);
+    ray.direction = vec3(float(pixelLoc.x), float(pixelLoc.y), 1.0) - camera.center;
 
-    vp.u = vec3(vp.width, 0, 0);
-    vp.v = vec3(0, vp.height, 0);
+    if (getSphereHit(ray, sphere)) {
+        pixelColor = vec4(0.5, 0.0, 0.2, 1.0);
+    }
 
-    vp.du = vp.u / float(size.x);
-    vp.dv = vp.v / float(size.y);
-    vp.upperLeft = camera.center - vec3(0, 0, 1.0) - vp.u/2 - vp.v/2;
-    vp.firstPixel = vp.upperLeft + 0.5 * (vp.du + vp.dv);    
-
-    Sphere sphere = Sphere(vec4(0.0, 1.0, 1.0, 1.0), vec3(0.0, 0.0, -2.0), 0.5);
-    Sphere ground = Sphere(vec4(0.0, 1.0, 0.0, 1.0), vec3(0.0, -100.5, -2.0), 100.0);
-
-
-
-    vec3 targetPixel = vp.firstPixel + (pixelCoords.x * vp.du) + (pixelCoords.y * vp.dv);
-
-    Ray ray = Ray(camera.center, targetPixel - camera.center);  
-    
-    vec4 pixelColor = getPixelColor(ray, sphere, ground, 10, vec4(0.2, 0.4, 0.9, 1.0));
-
-    
-    ivec2 pixelLoc = ivec2(gl_GlobalInvocationID.xy);
-     
 
     imageStore(img, pixelLoc, pixelColor);
 }

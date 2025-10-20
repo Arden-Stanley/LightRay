@@ -37,15 +37,15 @@ float get_random_f(vec2 seed) {
     return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-vec3 get_random_unit() {
+vec3 get_random_unit(float j) {
     vec3 p;
     float length_squared;
     float i = 10;
     while (true) {
         p = vec3(
-            (get_random_f(PIXEL_LOC + vec2(time + 41.0 + i, time + 102.0 + i))), 
-            (get_random_f(PIXEL_LOC + vec2(time + 67.0 + i, time + 127.0 + i))), 
-            (get_random_f(PIXEL_LOC + vec2(time + 420.0 + i, time + 273.0 + i)))
+            (get_random_f(PIXEL_LOC + vec2(41.0 + i + j, 102.0 + i + j))), 
+            (get_random_f(PIXEL_LOC + vec2(67.0 + i + j, 127.0 + i + j))), 
+            (get_random_f(PIXEL_LOC + vec2(420.0 + i + j, 273.0 + i + j)))
         );
         i += 10;
         length_squared = p.x * p.x + p.y * p.y + p.z * p.z;
@@ -55,8 +55,8 @@ vec3 get_random_unit() {
     };
 }
 
-vec3 get_unit_on_hemi(Ray ray) {
-    vec3 on_unit_sphere = get_random_unit();
+vec3 get_unit_on_hemi(Ray ray, float j) {
+    vec3 on_unit_sphere = get_random_unit(j);
     if (dot(on_unit_sphere, ray.normal) > 0.0)
         return on_unit_sphere;
     else 
@@ -120,22 +120,25 @@ void main() {
     Ray ray;
     ray.origin = viewport.center;
     ray.direction = normalize(target_pixel - viewport.center);
-
+    
     vec3 unit_direction = normalize(ray.direction);
     float a = 0.5 * (unit_direction.y + 1.0);
     vec3 gradient = (1.0-a) * vec3(1.0, 1.0, 1.0) + a * vec3(0.5, 0.7, 1.0);
     vec4 pixel_color = vec4(gradient, 1.0);
-    for (int i = 0; i < 5; i++) {
+    
+
+    //vec4 pixel_color = vec4(get_random_unit(), 1.0);
+    for (int i = 0; i < 10; i++) {
         if (get_sphere_hit(ray, sphere1)) {
-            pixel_color *= 0.9;
+            pixel_color *= 0.5;
         }
         else if (get_sphere_hit(ray, sphere2)) {
-            pixel_color *= 0.8;
+            pixel_color *= 0.5;
         }
         else {
             break;
         }
-        ray.direction = get_unit_on_hemi(ray);
+        ray.direction = get_unit_on_hemi(ray, i * 132);
         ray.origin = ray.hit;
     }
 

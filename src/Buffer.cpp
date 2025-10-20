@@ -49,7 +49,7 @@ namespace LR
 	void Buffer::Render(const RaytracingShader &raytracer, const RenderShader &bufferShader) const
 	{
 		raytracer.Use();
-		raytracer.SetUniform1f("time", time(NULL));
+		raytracer.SetUniform1f("time", float(time(NULL)));
 		glDispatchCompute((unsigned int) m_width, (unsigned int) m_height, 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 

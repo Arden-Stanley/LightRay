@@ -19,6 +19,7 @@ namespace LR
 			int m_width;
 			int m_height;
 			unsigned int m_texture;
+			std::chrono::steady_clock::time_point startTime; // temporary
 	};
 }
 

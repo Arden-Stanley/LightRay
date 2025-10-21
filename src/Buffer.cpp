@@ -39,6 +39,8 @@ namespace LR
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_width, m_height, 0, GL_RGBA, GL_FLOAT, NULL);
 
 		glBindImageTexture(0, m_texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+		
+		startTime = std::chrono::steady_clock::now();
 	}
 
 	Buffer::~Buffer() 
@@ -48,8 +50,12 @@ namespace LR
 
 	void Buffer::Render(const RaytracingShader &raytracer, const RenderShader &bufferShader) const
 	{
+		std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+		std::chrono::duration<float> duration = endTime - startTime;
+		float timeFloat = duration.count();
+		//startTime = std::chrono::steady_clock::now();
 		raytracer.Use();
-		raytracer.SetUniform1f("time", float(time(NULL)));
+		raytracer.SetUniform1f("time", timeFloat);
 		glDispatchCompute((unsigned int) m_width, (unsigned int) m_height, 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 

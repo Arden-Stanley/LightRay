@@ -11,7 +11,7 @@
 
 int main(int argc, char** argv) 
 {
-	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(1200, 800, "Test");	
+	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(800, 800, "Test");	
 
 	const std::string SOURCE_DIRECTORY = std::string(SOURCE_DIR);
 	LR::RenderShader bufferShader
@@ -82,6 +82,8 @@ int main(int argc, char** argv)
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+
+
 
 	return 0;
 }

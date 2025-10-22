@@ -18,33 +18,34 @@ namespace LR
 		glfwTerminate();
 	}
 
-	void Window::Update() const 
+	void Window::update() const 
 	{
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	bool Window::IsRunning() const 
+	bool Window::isRunning() const 
 	{
 		return !glfwWindowShouldClose(m_window);
 	}
 
-	int Window::GetWidth() const 
+	int Window::getWidth() const 
 	{
 		return m_width;
 	}
 
-	int Window::GetHeight() const
+	int Window::getHeight() const
 	{
 		return m_height;
 	}
 
-	GLFWwindow* Window::GetGLFWWindow() const 
+	GLFWwindow* Window::getGLFWWindow() const 
 	{
 		return m_window;
 	}
-	bool Window::IsKeyPressed(int key) const 
+	
+	bool Window::isKeyPressed(int key) const 
 	{
 		return glfwGetKey(m_window, key) == GLFW_PRESS;
 	}

@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "Window.h"
 #include "Shader.h"
+#include "Raytracing/Renderer.h"
 
 namespace LR 
 {
@@ -12,14 +13,14 @@ namespace LR
 		public:
 			Buffer(const std::unique_ptr<Window> &window);
 			~Buffer();
-			void Render(const RaytracingShader &raytracer, const RenderShader &bufferShader) const;
+			void render(const Shader &shader);
 		private:
 			unsigned int m_vbo;
 			unsigned int m_vao;
 			int m_width;
 			int m_height;
 			unsigned int m_texture;
-			std::chrono::steady_clock::time_point startTime; // temporary
+			Renderer m_renderer;
 	};
 }
 

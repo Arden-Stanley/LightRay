@@ -5,36 +5,21 @@
 
 namespace LR 
 {
-	class Shader 
+	class Shader
 	{
 		public:
-			~Shader() = default;
-			void Use() const;
-			void SetUniform1i(const std::string &name, int value) const;
-			void SetUniform1f(const std::string &name, float value) const;
-		protected:
-			unsigned int m_program;
-			typedef enum 
-			{
+			Shader(const std::string &vertexPath, const std::string &fragmentPath);
+			~Shader();
+			void use() const;
+			void setUniform1i(const std::string &name, int value) const;
+		private:
+			typedef enum {
 				VERTEX,
-				FRAGMENT,
-				COMPUTE	
-			} Type; 
-			unsigned int m_LoadShader(const std::string &path, Type shaderType) const;
-	};
+				FRAGMENT
+			} Type;
+			unsigned int m_program;
+			unsigned int m_loadShader(const std::string &path, Type shaderType) const;
 
-	class RenderShader : public Shader
-	{
-		public:
-			RenderShader(const std::string &vertexPath, const std::string &fragmentPath);
-			~RenderShader();
-	};
-
-	class RaytracingShader : public Shader
-	{
-		public:
-			RaytracingShader(const std::string &computePath);
-			~RaytracingShader();
 	};
 }
 

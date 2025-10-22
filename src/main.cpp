@@ -14,15 +14,10 @@ int main(int argc, char** argv)
 	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(800, 800, "Test");	
 
 	const std::string SOURCE_DIRECTORY = std::string(SOURCE_DIR);
-	LR::RenderShader bufferShader
+	LR::Shader bufferShader
 	(
 		SOURCE_DIRECTORY + "/src/shaders/vertex.glsl",
 		SOURCE_DIRECTORY + "/src/shaders/fragment.glsl"
-	);
-
-	LR::RaytracingShader rtShader
-	(
-	 	SOURCE_DIRECTORY + "/src/shaders/raytracer.glsl"
 	);
 
 	std::unique_ptr<LR::Buffer> screenBuffer = std::make_unique<LR::Buffer>(window);
@@ -33,7 +28,7 @@ int main(int argc, char** argv)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	ImGui_ImplGlfw_InitForOpenGL(window->GetGLFWWindow(), true);
+	ImGui_ImplGlfw_InitForOpenGL(window->getGLFWWindow(), true);
 	ImGui_ImplOpenGL3_Init();
 	ImGui::StyleColorsDark();
 	
@@ -44,7 +39,7 @@ int main(int argc, char** argv)
 	float lastFrame = 0.0f;
 	float deltaTime = 0.0f;
 	
-	while(window->IsRunning())
+	while(window->isRunning())
 	{	
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -52,7 +47,7 @@ int main(int argc, char** argv)
 
 		eventSystem.processInput(deltaTime);
 
-		window->Update();
+		window->update();
 		
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -72,7 +67,7 @@ int main(int argc, char** argv)
 		//ImGui::Checkbox("Show Debug Info", &showDebug);
 		ImGui::End();
 
-		screenBuffer->Render(rtShader, bufferShader);
+		screenBuffer->render(bufferShader);
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

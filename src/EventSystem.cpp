@@ -13,7 +13,7 @@ namespace LR
 		// Exit program with the ESC key
 		if (IsKeyPressed(GLFW_KEY_ESCAPE)) 
 		{
-			glfwSetWindowShouldClose(window->GetGLFWWindow(), true);
+			glfwSetWindowShouldClose(window->getGLFWWindow(), true);
 		}
 		moveSpeed = 5.0f * deltaTime;
 		/*
@@ -30,14 +30,14 @@ namespace LR
 	}
 	bool EventSystem::IsKeyPressed(int key) const 
 	{
-		return window->IsKeyPressed(key);
+		return window->isKeyPressed(key);
 	}
 	bool EventSystem::IsMouseButtonPressed(int button) const 
 	{
-		return glfwGetMouseButton(window->GetGLFWWindow(), button) == GLFW_PRESS;
+		return glfwGetMouseButton(window->getGLFWWindow(), button) == GLFW_PRESS;
 	}
 	void EventSystem::GetMousePosition(double& x, double& y) const 
 	{
-		glfwGetCursorPos(window->GetGLFWWindow(), &x, &y);
+		glfwGetCursorPos(window->getGLFWWindow(), &x, &y);
 	}
 }

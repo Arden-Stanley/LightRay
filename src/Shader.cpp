@@ -2,12 +2,23 @@
 
 namespace LR 
 {
-	void Shader::Use() const
+	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 	{
-		glUseProgram(m_program);
-	}
+		unsigned int vertexShader = m_loadShader(vertexPath, VERTEX);
+		unsigned int fragmentShader = m_loadShader(fragmentPath, FRAGMENT);
 
-	unsigned int Shader::m_LoadShader(const std::string &path, Type shaderType) const 
+		m_program = glCreateProgram();
+		glAttachShader(m_program, vertexShader);
+		glAttachShader(m_program, fragmentShader);
+		glLinkProgram(m_program);
+
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+	}
+	
+	Shader::~Shader() {}
+
+	unsigned int Shader::m_loadShader(const std::string &path, Type shaderType) const 
 	{
 		std::ifstream file(path);
 		if (!file)
@@ -37,9 +48,6 @@ namespace LR
 		case FRAGMENT:
 			shader = glCreateShader(GL_FRAGMENT_SHADER);
 			break;
-		case COMPUTE:
-			shader = glCreateShader(GL_COMPUTE_SHADER);
-			break;
 		default: 
 			break;
 		}
@@ -60,50 +68,12 @@ namespace LR
 		return shader;
 	}
 
-	void Shader::SetUniform1i(const std::string &name, int value) const
-	{
+	void Shader::use() const {
+		glUseProgram(m_program);
+	}
+
+	void Shader::setUniform1i(const std::string &name, int value) const	{
 		int shaderLocation = glGetUniformLocation(m_program, name.c_str());
 		glUniform1i(shaderLocation, value);
-	}
-
-	void Shader::SetUniform1f(const std::string &name, float value) const
-	{
-		int shaderLocation = glGetUniformLocation(m_program, name.c_str());
-		glUniform1f(shaderLocation, value);
-	}
-
-	RenderShader::RenderShader(const std::string& vertexPath, const std::string& fragmentPath)
-	{
-		unsigned int vertexShader = m_LoadShader(vertexPath, VERTEX);
-		unsigned int fragmentShader = m_LoadShader(fragmentPath, FRAGMENT);
-
-		m_program = glCreateProgram();
-		glAttachShader(m_program, vertexShader);
-		glAttachShader(m_program, fragmentShader);
-		glLinkProgram(m_program);
-
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-	}
-
-	RenderShader::~RenderShader() 
-	{
-			
-	}
-
-	RaytracingShader::RaytracingShader(const std::string &computePath)
-	{
-		unsigned int computeShader = m_LoadShader(computePath, COMPUTE);
-
-		m_program = glCreateProgram();
-		glAttachShader(m_program, computeShader);
-		glLinkProgram(m_program);
-
-		glDeleteShader(computeShader);
-	}
-	
-	RaytracingShader::~RaytracingShader() 
-	{
-	
 	}
 }

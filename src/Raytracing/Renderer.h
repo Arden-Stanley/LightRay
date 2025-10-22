@@ -1,8 +1,6 @@
 #ifndef RENDERER_CUH
 #define RENDERER_CUH
 
-#include "Utils.cuh"
-
 class Renderer {
     public:
         Renderer() = default;

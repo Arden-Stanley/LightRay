@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
+#include "utils.cuh"
 
 __device__ bool checkHit(Ray r) {
     Vec3 center = Vec3(0.0, 0.0, -3.0);
@@ -20,7 +21,7 @@ __device__ bool checkHit(Ray r) {
     }
 }
 
-__global__ void renderKernel(cudaSurfaceObject_t *surf, int width, int height) {
+__global__ void renderKernel(cudaSurfaceObject_t surf, int width, int height) {
     
 
     int i = threadIdx.x + blockIdx.x * blockDim.x;
@@ -28,7 +29,7 @@ __global__ void renderKernel(cudaSurfaceObject_t *surf, int width, int height) {
     if ((i >= width) || (j >= height)) {
         return;
     }
-
+    /*
     float focalLength = 1.0;
     Vec3 cameraCenter(0, 0, 0);
     float viewportHeight = 2.0;
@@ -46,40 +47,38 @@ __global__ void renderKernel(cudaSurfaceObject_t *surf, int width, int height) {
     if (checkHit(ray)) {
         pixelColor = make_float4(1.0, 0.0, 0.0, 1.0);
     }
+    */
+    float4 pixelColor = make_float4(0.5f, 0.3f, 1.0f, 1.0f);
     
-    surf2Dwrite(pixelColor, *surf, i * sizeof(float4), j);
+    surf2Dwrite(pixelColor, surf, i, j);
 }
 
 Renderer::Renderer(unsigned int texHandle, int screenWidth, int screenHeight) 
 : m_texHandle(texHandle), m_screenWidth(screenWidth), m_screenHeight(screenHeight) {}
 
-Renderer::~Renderer() {
-    //cudaGraphicsUnregisterResource(m_texPtr);
-}
+Renderer::~Renderer() {}
 
 void Renderer::render() {
-    cudaGraphicsResource_t m_texPtr;
+    cudaGraphicsResource *m_texPtr;
     cudaArray_t m_mappedTex;
-    cudaGraphicsGLRegisterImage(&m_texPtr, m_texHandle, GL_TEXTURE_2D, NULL);
+    cudaGraphicsGLRegisterImage(&m_texPtr, m_texHandle, GL_TEXTURE_2D, cudaGraphicsRegisterFlagsWriteDiscard);
     cudaGraphicsMapResources(1, &m_texPtr, 0);
     cudaGraphicsSubResourceGetMappedArray(&m_mappedTex, m_texPtr, 0, 0);
 
-    cudaResourceDesc resDesc; 
-    memset(&resDesc, 0, sizeof(resDesc));
+    cudaResourceDesc resDesc = {};
     resDesc.resType = cudaResourceTypeArray;
     resDesc.res.array.array = m_mappedTex;
 
     cudaSurfaceObject_t surf;
     cudaCreateSurfaceObject(&surf, &resDesc);
 
-    int tx = 8;
-    int ty = 8;
-
-    dim3 blocks(m_screenWidth / tx + 1, m_screenHeight / ty, + 1); 
-    dim3 threads(tx, ty);
-    renderKernel<<<blocks, threads>>>(&surf, m_screenWidth, m_screenHeight);
-    cudaDeviceSynchronize();
+    
+    dim3 blocks(16, 16); 
+    dim3 grid((m_screenWidth + 15) / 16, (m_screenHeight + 15) / 16);
+    renderKernel<<<grid, blocks>>>(surf, m_screenWidth, m_screenHeight);
+    
 
     cudaDestroySurfaceObject(surf);
     cudaGraphicsUnmapResources(1, &m_texPtr, 0);
+    cudaGraphicsUnregisterResource(m_texPtr);
 }

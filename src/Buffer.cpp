@@ -32,7 +32,7 @@ namespace LR
 		glGenTextures(1, &m_texture);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
+		glBindTexture(GL_TEXTURE_2D, 0);
 		m_renderer = Renderer(m_texture, m_width, m_height);
 	}
 

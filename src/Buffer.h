@@ -20,7 +20,7 @@ namespace LR
 			int m_width;
 			int m_height;
 			unsigned int m_texture;
-			Renderer m_renderer;
+			std::unique_ptr<Renderer> m_renderer;
 	};
 }
 

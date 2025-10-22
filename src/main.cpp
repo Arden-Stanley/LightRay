@@ -22,61 +22,63 @@ int main(int argc, char** argv)
 
 	std::unique_ptr<LR::Buffer> screenBuffer = std::make_unique<LR::Buffer>(window);
 
-	LR::EventSystem eventSystem(window.get());
+	//LR::EventSystem eventSystem(window.get());
 
 	//ImGui Initialization
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGui_ImplGlfw_InitForOpenGL(window->getGLFWWindow(), true);
-	ImGui_ImplOpenGL3_Init();
-	ImGui::StyleColorsDark();
+	//IMGUI_CHECKVERSION();
+	//ImGui::CreateContext();
+	//ImGuiIO& io = ImGui::GetIO();
+	//ImGui_ImplGlfw_InitForOpenGL(window->getGLFWWindow(), true);
+	//ImGui_ImplOpenGL3_Init();
+	//ImGui::StyleColorsDark();
 	
 
-	static float lightIntensity = 1.0f;
-	static bool showDebug = true;
+	//static float lightIntensity = 1.0f;
+	//static bool showDebug = true;
 
-	float lastFrame = 0.0f;
-	float deltaTime = 0.0f;
+	//float lastFrame = 0.0f;
+	//float deltaTime = 0.0f;
 	
 	while(window->isRunning())
 	{	
-		float currentFrame = static_cast<float>(glfwGetTime());
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		//float currentFrame = static_cast<float>(glfwGetTime());
+		//deltaTime = currentFrame - lastFrame;
+		//lastFrame = currentFrame;
 
-		eventSystem.processInput(deltaTime);
-
-		window->update();
-		
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		//ImGui::ShowDemoWindow();
-		ImGui::Begin("Light-Ray Editor");
-
-		//ADD TO SCENE LOGIC HERE
-		if (ImGui::Button("Reset Scene")) {
-			//scene.Reset();
-		}
-		if (ImGui::Button("Add Sphere")) {
-			//scene.AddSphere();
-		}
-		//ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
-		//ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
-		//ImGui::Checkbox("Show Debug Info", &showDebug);
-		ImGui::End();
+		//eventSystem.processInput(deltaTime);
 
 		screenBuffer->render(bufferShader);
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		window->update();
+		
+		//ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplGlfw_NewFrame();
+		//ImGui::NewFrame();
+		//ImGui::ShowDemoWindow();
+		//ImGui::Begin("Light-Ray Editor");
+
+		//ADD TO SCENE LOGIC HERE
+		//if (ImGui::Button("Reset Scene")) {
+			//scene.Reset();
+		//}
+		//if (ImGui::Button("Add Sphere")) {
+			//scene.AddSphere();
+		//}
+		//ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
+		//ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
+		//ImGui::Checkbox("Show Debug Info", &showDebug);
+		//ImGui::End();
+
+		
+
+		//ImGui::Render();
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	//ImGui Cleanup
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui_ImplOpenGL3_Shutdown();
+	//ImGui_ImplGlfw_Shutdown();
+	//ImGui::DestroyContext();
 
 
 

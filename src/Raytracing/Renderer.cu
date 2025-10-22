@@ -4,6 +4,9 @@
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
 #include "utils.cuh"
+#include <stdio.h>
+
+
 
 __device__ bool checkHit(Ray r) {
     Vec3 center = Vec3(0.0, 0.0, -3.0);
@@ -26,8 +29,9 @@ __global__ void renderKernel(cudaSurfaceObject_t surf, int width, int height) {
 
     int i = threadIdx.x + blockIdx.x * blockDim.x;
     int j = threadIdx.y + blockIdx.y * blockDim.y;
-    if ((i >= width) || (j >= height)) {
-        return;
+    if ((i < width) && (j < height)) {
+        float4 pixelColor = make_float4(0.5f, 0.3f, 0.0f, 1.0f);
+        surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
     }
     /*
     float focalLength = 1.0;
@@ -48,37 +52,76 @@ __global__ void renderKernel(cudaSurfaceObject_t surf, int width, int height) {
         pixelColor = make_float4(1.0, 0.0, 0.0, 1.0);
     }
     */
-    float4 pixelColor = make_float4(0.5f, 0.3f, 1.0f, 1.0f);
     
-    surf2Dwrite(pixelColor, surf, i, j);
 }
 
-Renderer::Renderer(unsigned int texHandle, int screenWidth, int screenHeight) 
-: m_texHandle(texHandle), m_screenWidth(screenWidth), m_screenHeight(screenHeight) {}
 
-Renderer::~Renderer() {}
+cudaGraphicsResource *m_texPtr;
+cudaArray_t m_mappedTex;
+cudaSurfaceObject_t surf;
+
+Renderer::Renderer(unsigned int texHandle, int screenWidth, int screenHeight) 
+: m_texHandle(texHandle), m_screenWidth(screenWidth), m_screenHeight(screenHeight) {
+    
+    cudaGraphicsGLRegisterImage(&m_texPtr, m_texHandle, GL_TEXTURE_2D, cudaGraphicsRegisterFlagsSurfaceLoadStore);
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 1: " << cudaGetErrorString(err) << "\n";
+    }
+
+}
+
+Renderer::~Renderer() {
+    cudaGraphicsUnregisterResource(m_texPtr);
+}
 
 void Renderer::render() {
-    cudaGraphicsResource *m_texPtr;
-    cudaArray_t m_mappedTex;
-    cudaGraphicsGLRegisterImage(&m_texPtr, m_texHandle, GL_TEXTURE_2D, cudaGraphicsRegisterFlagsWriteDiscard);
     cudaGraphicsMapResources(1, &m_texPtr, 0);
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 2: " << cudaGetErrorString(err) << "\n";
+    }
     cudaGraphicsSubResourceGetMappedArray(&m_mappedTex, m_texPtr, 0, 0);
+    err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 3: " << cudaGetErrorString(err) << "\n";
+    }
+
+
 
     cudaResourceDesc resDesc = {};
+    //memset(&resDesc, 0, sizeof(resDesc));
     resDesc.resType = cudaResourceTypeArray;
     resDesc.res.array.array = m_mappedTex;
+    err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 4: " << cudaGetErrorString(err) << "\n";
+    }
 
-    cudaSurfaceObject_t surf;
+    
     cudaCreateSurfaceObject(&surf, &resDesc);
+    err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 5: " << cudaGetErrorString(err) << "\n";
+    }
 
     
     dim3 blocks(16, 16); 
     dim3 grid((m_screenWidth + 15) / 16, (m_screenHeight + 15) / 16);
+
     renderKernel<<<grid, blocks>>>(surf, m_screenWidth, m_screenHeight);
-    
+    err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 6: " << cudaGetErrorString(err) << "\n";
+    }
+
+    cudaDeviceSynchronize();
+    err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA Kernel Error 7: " << cudaGetErrorString(err) << "\n";
+    }
 
     cudaDestroySurfaceObject(surf);
     cudaGraphicsUnmapResources(1, &m_texPtr, 0);
-    cudaGraphicsUnregisterResource(m_texPtr);
+
 }

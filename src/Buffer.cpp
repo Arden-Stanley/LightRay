@@ -3,7 +3,7 @@
 namespace LR 
 {
 	Buffer::Buffer(const std::unique_ptr<Window> &window)
-		: m_vbo(0), m_vao(0), m_width(window->getWidth()), m_height(window->getHeight()), m_texture(0)
+		: m_vbo(0), m_vao(0), m_width(window->getWidth()), m_height(window->getHeight()), m_texture(0), m_renderer(nullptr)
 	{
 		float quad[] =
 		{   //vertices        //texture coords
@@ -31,21 +31,25 @@ namespace LR
 
 		glGenTextures(1, &m_texture);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_width, m_height, 0, GL_RGBA, GL_FLOAT, nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		m_renderer = Renderer(m_texture, m_width, m_height);
+		
+		m_renderer = std::make_unique<Renderer>(m_texture, m_width, m_height);
 	}
 
 	Buffer::~Buffer() {}
 
 	void Buffer::render(const Shader &shader)
 	{
-		m_renderer.render();
+		m_renderer->render();
 		shader.use();
-		shader.setUniform1i("tex", 0);
-		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 		glBindVertexArray(m_vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

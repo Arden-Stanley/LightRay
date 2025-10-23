@@ -71,9 +71,4 @@ namespace LR
 	void Shader::use() const {
 		glUseProgram(m_program);
 	}
-
-	void Shader::setUniform1i(const std::string &name, int value) const	{
-		int shaderLocation = glGetUniformLocation(m_program, name.c_str());
-		glUniform1i(shaderLocation, value);
-	}
 }

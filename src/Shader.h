@@ -11,7 +11,6 @@ namespace LR
 			Shader(const std::string &vertexPath, const std::string &fragmentPath);
 			~Shader();
 			void use() const;
-			void setUniform1i(const std::string &name, int value) const;
 		private:
 			typedef enum {
 				VERTEX,

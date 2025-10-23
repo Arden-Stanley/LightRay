@@ -41,7 +41,6 @@ namespace LR
 		m_renderer = std::make_unique<Renderer>(m_texture, m_width, m_height);
 	}
 
-	Buffer::~Buffer() {}
 
 	void Buffer::render(const Shader &shader)
 	{

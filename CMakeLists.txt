@@ -11,6 +11,8 @@ add_executable(
     src/EventSystem.cpp 
     src/Buffer.cpp 
     src/Raytracing/Renderer.cu
+    src/Raytracing/Vector.cu
+    src/Raytracing/Ray.cu
 )
 
 target_compile_definitions(lightray PUBLIC SOURCE_DIR="${CMAKE_SOURCE_DIR}")

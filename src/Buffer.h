@@ -12,7 +12,7 @@ namespace LR
 	{
 		public:
 			Buffer(const std::unique_ptr<Window> &window);
-			~Buffer();
+			~Buffer() = default;
 			void render(const Shader &shader);
 		private:
 			unsigned int m_vbo;

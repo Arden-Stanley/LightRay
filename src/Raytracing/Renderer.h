@@ -1,6 +1,8 @@
 #ifndef RENDERER_CUH
 #define RENDERER_CUH
 
+#include <iostream>
+
 class Renderer {
     public:
         Renderer() = default;

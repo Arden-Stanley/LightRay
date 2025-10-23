@@ -13,7 +13,11 @@ add_executable(
     src/Raytracing/Renderer.cu
     src/Raytracing/Vector.cu
     src/Raytracing/Ray.cu
+    src/Raytracing/RaytracingKernel.cu 
+    src/Raytracing/Sphere.cu
 )
+
+set_target_properties(lightray PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 target_compile_definitions(lightray PUBLIC SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 

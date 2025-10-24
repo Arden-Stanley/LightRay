@@ -1,7 +1,14 @@
 #include "Sphere.cuh"
 
 namespace LR {
-    __device__ Sphere::Sphere(float r, const Vec3 &pos) : m_radius(r), m_position(pos) {}
+    __device__ Sphere::Sphere(float r, const Vec3 &pos, Material *material) 
+    : m_radius(r), m_position(pos), m_material(nullptr) {
+        m_material = material;
+    }
+
+    __device__ Sphere::~Sphere() {
+        //cudaFree(m_material);
+    }
     
     __device__ bool Sphere::checkHit(Ray &r) const {
         Vec3 oc = m_position - r.getOrigin();
@@ -16,9 +23,9 @@ namespace LR {
         float sqrtd = sqrt(discriminant);
 
         float root = (b - sqrtd) / a;
-        if (root <= 0.01f) {
+        if (root <= 0.001) {
             root = (b - sqrtd) / a;
-            if (root <= 0.01f) {
+            if (root <= 0.001) {
                 return false;
             }
         }
@@ -37,10 +44,12 @@ namespace LR {
 
     __device__ void Sphere::setPayload(Ray &ray, float t) const {
         Vec3 hit = ray.pointAt(t);
-        ray.payload = Payload(
-            t, 
-            hit,
-            (hit - m_position) / m_radius
-        );
+        ray.payload.t = t;
+        ray.payload.hit = hit;
+        ray.payload.normal = (hit - m_position) / m_radius;
+    }
+
+    __device__ Material *Sphere::getMat() const {
+        return m_material;
     }
 }

@@ -5,6 +5,7 @@
 #include "Vector.cuh"
 #include "Sphere.cuh"
 #include "Random.cuh"
+#include "Material.cuh"
 #include <curand_kernel.h>
 
 namespace LR {

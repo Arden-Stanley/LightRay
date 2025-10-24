@@ -5,7 +5,7 @@ project(LightRay LANGUAGES CXX CUDA)
 add_executable(
     lightray 
     src/main.cpp 
-    src/Scene.cpp 
+    #src/Scene.cpp 
     src/Shader.cpp 
     src/Window.cpp 
     src/EventSystem.cpp 
@@ -16,6 +16,7 @@ add_executable(
     src/Raytracing/RaytracingKernel.cu 
     src/Raytracing/Sphere.cu
     src/Raytracing/Random.cu
+    src/Raytracing/Material.cu
 )
 
 set_target_properties(lightray PROPERTIES CUDA_SEPARABLE_COMPILATION ON)

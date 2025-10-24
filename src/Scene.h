@@ -4,16 +4,7 @@
 #include "Common.h"
 
 namespace LR {
-    class Sphere {
-        public:
-            Sphere(const Vec3 &position, float radius);
-            ~Sphere();
-        private:
-            Vec3 m_position;
-            float m_radius;
-    };
-
-    class Scene {
+    /*class Scene {
         public:
             Scene();
             ~Scene();
@@ -21,7 +12,7 @@ namespace LR {
             void Render() const;
         private:
             std::vector<Sphere> _objects;
-    };
+    };*/
 }
 
 #endif

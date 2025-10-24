@@ -23,31 +23,44 @@ namespace LR{
 
             //Vec3 targetPixel = firstPixel + (i * du) + (j * dv);
             
-            Sphere sphere(1.0, {0.0, 0.0, -3.0});
-            Sphere ground(100.0, {0.0, -101.0, -3.0});
+            Lambertian mat1({1.0, 0.0, 1.0});
+            Lambertian mat2({0.0, 1.0, 0.2});
+            Metal mat3({0.3, 0.3, 0.3}, 0.05);
+            Dielectric mat4(0.9);
+
+            Sphere sphere(1.0, {-2.0, 0.0, -3.0}, &mat1);
+            Sphere mirror(1.0, {2.0, 0.0, -3.0}, &mat3);
+            Sphere glass(1.0, {0.0, 0.0, -3.0}, &mat4);
+            Sphere ground(100.0, {0.0, -101.0, -3.0}, &mat2);
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 50; s++) {
+            for (int s = 0; s < 100; s++) {
                 Ray ray = randGen.getSampRay(i, j, firstPixel, du, dv, cameraCenter);
-                float attenuation = 1.0;
                 Vec3 color(0.5, 0.8, 1.0);
+                Material *mat;
                 for (int idx = 0; idx < 5; idx++) {
                     if (sphere.checkHit(ray)) {
-                        attenuation *= 0.6;
+                        mat = sphere.getMat();
+                    }
+                    else if (mirror.checkHit(ray)) {
+                        mat = mirror.getMat();
+                    }
+                    else if (glass.checkHit(ray)) {
+                        mat = glass.getMat();
                     }
                     else if (ground.checkHit(ray)) {
-                        attenuation *= 0.6;
+                        mat = ground.getMat();
                     }
                     else { 
-                        finalColor += (color * attenuation);
                         break;
                     }
-                    Vec3 targ = ray.payload.getNormal() + randGen.getVec3(ray.payload.getNormal());
-                    ray = Ray(ray.payload.getHit(), targ);
+                    color = color * mat->getAlbedo();
+                    ray = mat->scatter(ray, randGen);
                 }
+                finalColor += color;
             }
 
-            finalColor = finalColor / 50;
+            finalColor = finalColor / 100;
             float4 pixelColor = make_float4(finalColor.getX(), finalColor.getY(), finalColor.getZ(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

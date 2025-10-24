@@ -59,8 +59,11 @@ namespace LR {
         
         dim3 blocks(16, 16); 
         dim3 grid((m_screenWidth + 15) / 16, (m_screenHeight + 15) / 16);
-
-        renderKernel<<<grid, blocks>>>(surf, m_screenWidth, m_screenHeight);
+        static float rando = 1000;
+        renderKernel<<<grid, blocks>>>(surf, m_screenWidth, m_screenHeight, 1000021);
+        rando += 21;
+        
+        
         err = cudaGetLastError();
         if (err != cudaSuccess) {
             std::cerr << "CUDA Kernel Error 6: " << cudaGetErrorString(err) << "\n";

@@ -15,6 +15,7 @@ add_executable(
     src/Raytracing/Ray.cu
     src/Raytracing/RaytracingKernel.cu 
     src/Raytracing/Sphere.cu
+    src/Raytracing/Random.cu
 )
 
 set_target_properties(lightray PROPERTIES CUDA_SEPARABLE_COMPILATION ON)

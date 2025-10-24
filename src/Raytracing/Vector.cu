@@ -1,5 +1,6 @@
 #include "Vector.cuh" 
 
+
 namespace LR {
     __host__ __device__ Vec3::Vec3() : m_vec{0, 0, 0} {}
 

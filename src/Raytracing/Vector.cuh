@@ -1,6 +1,8 @@
 #ifndef VECTOR_CUH
 #define VECTOR_CUH
 
+#include <curand_kernel.h>
+
 namespace LR {
     class Vec3 {
         public:

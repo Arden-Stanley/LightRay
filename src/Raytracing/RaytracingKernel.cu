@@ -27,11 +27,11 @@ namespace LR{
             Sphere ground(100.0, {0.0, -101.0, -3.0});
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 100; s++) {
+            for (int s = 0; s < 50; s++) {
                 Ray ray = randGen.getSampRay(i, j, firstPixel, du, dv, cameraCenter);
                 float attenuation = 1.0;
                 Vec3 color(0.5, 0.8, 1.0);
-                for (int idx = 0; idx < 20; idx++) {
+                for (int idx = 0; idx < 5; idx++) {
                     if (sphere.checkHit(ray)) {
                         attenuation *= 0.6;
                     }
@@ -47,7 +47,7 @@ namespace LR{
                 }
             }
 
-            finalColor = finalColor / 100;
+            finalColor = finalColor / 50;
             float4 pixelColor = make_float4(finalColor.getX(), finalColor.getY(), finalColor.getZ(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

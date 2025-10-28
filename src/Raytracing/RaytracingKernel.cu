@@ -2,6 +2,8 @@
 
 namespace LR{
     __global__ void renderKernel(cudaSurfaceObject_t surf, int width, int height, unsigned long long seed) {
+        using namespace RT;
+
         int i = threadIdx.x + blockIdx.x * blockDim.x;
         int j = threadIdx.y + blockIdx.y * blockDim.y;
         if ((i < width) && (j < height)) {
@@ -34,20 +36,20 @@ namespace LR{
             Sphere ground(100.0, {0.0, -101.0, -3.0}, &mat2);
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 100; s++) {
+            for (int s = 0; s < 40; s++) {
                 Ray ray = randGen.getSampRay(i, j, firstPixel, du, dv, cameraCenter);
                 Vec3 color(0.5, 0.8, 1.0);
                 Material *mat;
-                for (int idx = 0; idx < 5; idx++) {
+                for (int idx = 0; idx < 10; idx++) {
                     if (sphere.checkHit(ray)) {
                         mat = sphere.getMat();
                     }
                     else if (mirror.checkHit(ray)) {
                         mat = mirror.getMat();
                     }
-                    else if (glass.checkHit(ray)) {
-                        mat = glass.getMat();
-                    }
+                    //else if (glass.checkHit(ray)) {
+                    //    mat = glass.getMat();
+                    //}
                     else if (ground.checkHit(ray)) {
                         mat = ground.getMat();
                     }
@@ -60,7 +62,7 @@ namespace LR{
                 finalColor += color;
             }
 
-            finalColor = finalColor / 100;
+            finalColor = finalColor / 40;
             float4 pixelColor = make_float4(finalColor.getX(), finalColor.getY(), finalColor.getZ(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

@@ -8,7 +8,6 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-
 int main(int argc, char** argv) 
 {
 	std::unique_ptr<LR::Window> window = std::make_unique<LR::Window>(1000, 800, "Test");	

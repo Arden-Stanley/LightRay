@@ -3,8 +3,10 @@
 
 #include "Common.h"
 
+class Sphere;
+
 namespace LR {
-    /*class Scene {
+    class Scene {
         public:
             Scene();
             ~Scene();
@@ -12,7 +14,7 @@ namespace LR {
             void Render() const;
         private:
             std::vector<Sphere> _objects;
-    };*/
+    };
 }
 
 #endif

@@ -18,7 +18,6 @@ namespace LR
 			void GetMousePosition(double& x, double& y) const;
 
 			float moveSpeed;
-			//glm::vec3 cameraPosition;
 		private:
 			Window* window;
 	};

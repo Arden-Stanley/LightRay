@@ -3,7 +3,8 @@
 #include "Buffer.h"
 #include "Common.h"
 #include "EventSystem.h"
-#include "Scene.h"
+#include "Camera.h"
+//#include "Scene.h"
 //ImGui Headers
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -22,7 +23,9 @@ int main(int argc, char** argv)
 
 	std::unique_ptr<LR::Buffer> screenBuffer = std::make_unique<LR::Buffer>(window);
 
-	LR::EventSystem eventSystem(window.get());
+	std::unique_ptr<LR::Camera> camera = std::make_unique<LR::Camera>(LR::Position{0.0, 0.0, 0.0});
+
+	std::unique_ptr<LR::EventSystem> eventSystem = std::make_unique<LR::EventSystem>(window.get());
 
 	//ImGui Initialization
 	IMGUI_CHECKVERSION();
@@ -39,7 +42,7 @@ int main(int argc, char** argv)
 	float lastFrame = 0.0f;
 	float deltaTime = 0.0f;
 
-	LR::Scene scene;
+	//LR::Scene scene;
 	
 	while(window->isRunning())
 	{	
@@ -47,7 +50,7 @@ int main(int argc, char** argv)
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		eventSystem.processInput(deltaTime);
+		eventSystem->processInput(deltaTime);
 
 		screenBuffer->render(bufferShader);
 
@@ -66,8 +69,8 @@ int main(int argc, char** argv)
 		if (ImGui::Button("Add Sphere")) {
 			//scene.AddSphere();
 		}
-		ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
-		ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
+		//ImGui::SliderFloat("Field of View", &scene.fieldOfView, 10.0f, 120.0f);
+		//ImGui::SliderInt("Ray Depth", &scene.rayDepth, 1, 10);
 		ImGui::Checkbox("Show Debug Info", &showDebug);
 		ImGui::End();
 

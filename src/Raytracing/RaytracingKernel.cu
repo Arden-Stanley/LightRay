@@ -22,12 +22,10 @@ namespace LR{
             Vec3 dv = v / float(height);
             Vec3 upperLeft = cameraCenter - Vec3(0, 0, focalLength) - (u / 2) - (v / 2);
             Vec3 firstPixel = upperLeft + 0.5f * (du + dv);
-
-            //Vec3 targetPixel = firstPixel + (i * du) + (j * dv);
             
             Lambertian mat1({1.0, 0.0, 1.0});
             Lambertian mat2({0.0, 1.0, 0.2});
-            Metal mat3({0.3, 0.3, 0.3}, 0.05);
+            Metal mat3({0.8, 0.8, 0.8}, 0.05);
             Dielectric mat4(0.9);
 
             Sphere sphere(1.0, {-2.0, 0.0, -3.0}, &mat1);
@@ -36,11 +34,11 @@ namespace LR{
             Sphere ground(100.0, {0.0, -101.0, -3.0}, &mat2);
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 40; s++) {
+            for (int s = 0; s < 20; s++) {
                 Ray ray = randGen.getSampRay(i, j, firstPixel, du, dv, cameraCenter);
                 Vec3 color(0.5, 0.8, 1.0);
                 Material *mat;
-                for (int idx = 0; idx < 10; idx++) {
+                for (int idx = 0; idx < 5; idx++) {
                     if (sphere.checkHit(ray)) {
                         mat = sphere.getMat();
                     }
@@ -48,8 +46,8 @@ namespace LR{
                         mat = mirror.getMat();
                     }
                     //else if (glass.checkHit(ray)) {
-                    //    mat = glass.getMat();
-                    //}
+                       // mat = glass.getMat();
+                   // }
                     else if (ground.checkHit(ray)) {
                         mat = ground.getMat();
                     }
@@ -62,7 +60,7 @@ namespace LR{
                 finalColor += color;
             }
 
-            finalColor = finalColor / 40;
+            finalColor = finalColor / 20;
             float4 pixelColor = make_float4(finalColor.getX(), finalColor.getY(), finalColor.getZ(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

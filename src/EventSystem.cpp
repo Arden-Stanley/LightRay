@@ -16,8 +16,7 @@ namespace LR
 			glfwSetWindowShouldClose(window->getGLFWWindow(), true);
 		}
 		moveSpeed = 5.0f * deltaTime;
-		/*
-		Camera controls
+		//Camera controls
 		if (IsKeyPressed(GLFW_KEY_W))
 			cameraPosition.z -= moveSpeed;
 		if (IsKeyPressed(GLFW_KEY_S))
@@ -26,7 +25,6 @@ namespace LR
 			cameraPosition.x -= moveSpeed;
 		if (IsKeyPressed(GLFW_KEY_D))
 			cameraPosition.x += moveSpeed;
-		*/
 	}
 	bool EventSystem::IsKeyPressed(int key) const 
 	{

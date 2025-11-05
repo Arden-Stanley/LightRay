@@ -2,7 +2,6 @@
 
 
 namespace LR {
-    namespace RT {
         __host__ __device__ Vec3::Vec3() : m_vec{0, 0, 0} {}
 
         __host__ __device__ Vec3::Vec3(float x, float y, float z) : m_vec{x, y, z} {}  
@@ -96,5 +95,4 @@ namespace LR {
         __host__ __device__ Vec3 unit(const Vec3& v) {
             return v / v.length();
         }
-    }
 }

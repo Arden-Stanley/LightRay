@@ -1,7 +1,6 @@
 #include "Sphere.cuh"
 
 namespace LR {
-    namespace RT {
         __device__ Sphere::Sphere(float r, const Vec3 &pos, Material *material) 
         : m_radius(r), m_position(pos), m_material(nullptr) {
             m_material = material;
@@ -53,5 +52,4 @@ namespace LR {
         __device__ Material *Sphere::getMat() const {
             return m_material;
         }
-    }
 }

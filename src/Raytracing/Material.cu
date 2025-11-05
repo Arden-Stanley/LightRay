@@ -1,7 +1,6 @@
 #include "Material.cuh"
 
 namespace LR {
-    namespace RT {
         __device__ Lambertian::Lambertian(const Vec3 &albedo) : m_albedo(albedo) {}
 
         __device__ Ray Lambertian::scatter(Ray &ray, Random &randGen) const {
@@ -63,5 +62,4 @@ namespace LR {
         __device__ Vec3 Dielectric::getAlbedo() const {
             return Vec3(1.0, 1.0, 1.0);
         }
-    }
 }

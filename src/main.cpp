@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 
 	std::unique_ptr<LR::Camera> camera = std::make_unique<LR::Camera>(LR::Position{0.0, 0.0, 0.0});
 
-	std::unique_ptr<LR::EventSystem> eventSystem = std::make_unique<LR::EventSystem>(window.get());
+	std::unique_ptr<LR::EventSystem> eventSystem = std::make_unique<LR::EventSystem>(window.get(), camera.get());
 
 	//ImGui Initialization
 	IMGUI_CHECKVERSION();
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
 		eventSystem->processInput(deltaTime);
 
-		screenBuffer->render(bufferShader);
+		screenBuffer->render(bufferShader, *camera);
 
 		window->update();
 		

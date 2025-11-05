@@ -6,7 +6,6 @@
 #include "Ray.cuh"
 
 namespace LR {
-    namespace RT { 
         class Random {
             public:
                 __device__ Random(curandState &state);
@@ -15,7 +14,6 @@ namespace LR {
             private:
                 curandState m_state;
         };
-    }         
 }
 
 #endif

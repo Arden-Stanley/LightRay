@@ -6,7 +6,6 @@
 #include "Random.cuh"
 
 namespace LR {
-    namespace RT {
         class Material {
             public:
                 __device__ virtual Ray scatter(Ray &ray, Random &randGen) const = 0;
@@ -40,7 +39,6 @@ namespace LR {
             private:
                 double m_refraction;
         };
-    }
 }
 
 #endif

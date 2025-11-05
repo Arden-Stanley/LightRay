@@ -8,6 +8,7 @@ add_executable(
     #src/Scene.cpp 
     src/Shader.cpp 
     src/Window.cpp 
+    src/Camera.cpp
     src/EventSystem.cpp 
     src/Buffer.cpp 
     src/Raytracing/Renderer.cu

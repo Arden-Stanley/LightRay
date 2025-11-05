@@ -4,7 +4,6 @@
 #include <curand_kernel.h>
 
 namespace LR {
-    namespace RT {
         class Vec3 {
             public:
                 __host__ __device__ Vec3();
@@ -42,7 +41,6 @@ namespace LR {
         __host__ __device__ Vec3 cross(const Vec3& u, const Vec3& v);
 
         __host__ __device__ Vec3 unit(const Vec3& v);
-    }
 }
 
 #endif

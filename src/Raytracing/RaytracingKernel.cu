@@ -1,9 +1,7 @@
 #include "RaytracingKernel.cuh"
 
-namespace LR{
-    __global__ void renderKernel(cudaSurfaceObject_t surf, int width, int height, unsigned long long seed) {
-        using namespace RT;
-
+namespace LR {
+    __global__ void renderKernel(cudaSurfaceObject_t surf, Vec3 cameraPos, int width, int height, unsigned long long seed) {
         int i = threadIdx.x + blockIdx.x * blockDim.x;
         int j = threadIdx.y + blockIdx.y * blockDim.y;
         if ((i < width) && (j < height)) {
@@ -13,7 +11,7 @@ namespace LR{
 
             
             float focalLength = 1.0;
-            Vec3 cameraCenter(0, 0, 0);
+            Vec3 cameraCenter = cameraPos;
             float viewportHeight = 2.0;
             float viewportWidth = viewportHeight * (float(width) / height);
             Vec3 u = Vec3(viewportWidth, 0, 0);
@@ -34,7 +32,7 @@ namespace LR{
             Sphere ground(100.0, {0.0, -101.0, -3.0}, &mat2);
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 20; s++) {
+            for (int s = 0; s < 4; s++) {
                 Ray ray = randGen.getSampRay(i, j, firstPixel, du, dv, cameraCenter);
                 Vec3 color(0.5, 0.8, 1.0);
                 Material *mat;
@@ -60,7 +58,7 @@ namespace LR{
                 finalColor += color;
             }
 
-            finalColor = finalColor / 20;
+            finalColor = finalColor / 4;
             float4 pixelColor = make_float4(finalColor.getX(), finalColor.getY(), finalColor.getZ(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

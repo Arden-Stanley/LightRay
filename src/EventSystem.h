@@ -2,13 +2,14 @@
 #include "Window.h"
 #include "Common.h"
 //#include <glm/glm.hpp>
+#include "Camera.h"
 
 namespace LR 
 {
 	class EventSystem 
 	{
 		public:
-			EventSystem(Window* window);
+			EventSystem(Window* window, Camera* camera);
 			~EventSystem();
 			
 			void processInput(float deltaTime);
@@ -17,8 +18,9 @@ namespace LR
 			bool IsMouseButtonPressed(int button) const;
 			void GetMousePosition(double& x, double& y) const;
 
-			float moveSpeed;
+			float moveSpeed; //TODO: Move to camera class
 		private:
-			Window* window;
+			Window* m_window;
+			Camera* m_camera;
 	};
 }

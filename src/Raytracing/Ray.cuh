@@ -4,7 +4,6 @@
 #include "Vector.cuh"
 
 namespace LR {    
-    namespace RT {
         struct Payload {
             float t;
             Vec3 hit, normal;
@@ -23,7 +22,6 @@ namespace LR {
                 Vec3 m_dir;
 
         };
-    }
 }
 
 #endif

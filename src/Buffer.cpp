@@ -42,9 +42,9 @@ namespace LR
 	}
 
 
-	void Buffer::render(const Shader &shader)
+	void Buffer::render(const Shader &shader, const Camera &camera)
 	{
-		m_renderer->render();
+		m_renderer->render({camera.GetPos().x, camera.GetPos().y, camera.GetPos().z});
 		shader.use();
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 		glBindVertexArray(m_vao);

@@ -1,7 +1,6 @@
 #include "Ray.cuh"
 
 namespace LR {
-    namespace RT {
         __device__ Ray::Ray(const Vec3& origin, const Vec3& direction) : m_origin(origin), m_dir(direction) {}
 
         __device__ Vec3 Ray::getOrigin() const {
@@ -15,5 +14,4 @@ namespace LR {
         __device__ Vec3 Ray::pointAt(float t) const {
             return m_origin + t * m_dir;
         }
-    }
 }

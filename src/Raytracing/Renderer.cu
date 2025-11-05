@@ -26,7 +26,7 @@ namespace LR {
         cudaGraphicsUnregisterResource(m_texPtr);
     }
 
-    void Renderer::render() {
+    void Renderer::render(const Pos &camPos) {
         cudaGraphicsMapResources(1, &m_texPtr, 0);
         cudaError_t err = cudaGetLastError();
         if (err != cudaSuccess) {
@@ -60,7 +60,7 @@ namespace LR {
         dim3 blocks(16, 16); 
         dim3 grid((m_screenWidth + 15) / 16, (m_screenHeight + 15) / 16);
         static float rando = 1000;
-        renderKernel<<<grid, blocks>>>(surf, m_screenWidth, m_screenHeight, 1000021);
+        renderKernel<<<grid, blocks>>>(surf, {camPos.x, camPos.y, camPos.z},m_screenWidth, m_screenHeight, 1000021);
         rando += 21;
         
         

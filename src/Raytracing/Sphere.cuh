@@ -7,7 +7,7 @@
 #include <cuda_runtime.h>
 
 namespace LR {
-    namespace RT {
+
         class Sphere {
             public:
                 __device__ Sphere(float r, const Vec3& pos, Material *material);
@@ -22,7 +22,6 @@ namespace LR {
                 Vec3 m_position;
                 Material *m_material;
         };
-    }
 }
 
 #endif

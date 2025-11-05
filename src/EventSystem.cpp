@@ -4,7 +4,8 @@
 
 namespace LR 
 {
-	EventSystem::EventSystem(Window* window) : window(window) /*cameraPosition(0.0f, 0.0f, 0.0f)*/ {}
+	EventSystem::EventSystem(Window* window, Camera* camera) 
+	: m_window(window), m_camera(camera) {}
 
 	EventSystem::~EventSystem() {}
 
@@ -13,29 +14,29 @@ namespace LR
 		// Exit program with the ESC key
 		if (IsKeyPressed(GLFW_KEY_ESCAPE)) 
 		{
-			glfwSetWindowShouldClose(window->getGLFWWindow(), true);
+			glfwSetWindowShouldClose(m_window->getGLFWWindow(), true);
 		}
 		moveSpeed = 5.0f * deltaTime;
 		//Camera controls
 		if (IsKeyPressed(GLFW_KEY_W))
-			cameraPosition.z -= moveSpeed;
+			m_camera->Move(Position{0, 0, -moveSpeed});
 		if (IsKeyPressed(GLFW_KEY_S))
-			cameraPosition.z += moveSpeed;
+			m_camera->Move(Position{0, 0, moveSpeed});
 		if (IsKeyPressed(GLFW_KEY_A))
-			cameraPosition.x -= moveSpeed;
+			m_camera->Move(Position{-moveSpeed, 0, 0});
 		if (IsKeyPressed(GLFW_KEY_D))
-			cameraPosition.x += moveSpeed;
+			m_camera->Move(Position{moveSpeed, 0, 0});
 	}
 	bool EventSystem::IsKeyPressed(int key) const 
 	{
-		return window->isKeyPressed(key);
+		return m_window->isKeyPressed(key);
 	}
 	bool EventSystem::IsMouseButtonPressed(int button) const 
 	{
-		return glfwGetMouseButton(window->getGLFWWindow(), button) == GLFW_PRESS;
+		return glfwGetMouseButton(m_window->getGLFWWindow(), button) == GLFW_PRESS;
 	}
 	void EventSystem::GetMousePosition(double& x, double& y) const 
 	{
-		glfwGetCursorPos(window->getGLFWWindow(), &x, &y);
+		glfwGetCursorPos(m_window->getGLFWWindow(), &x, &y);
 	}
 }

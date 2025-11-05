@@ -1,7 +1,6 @@
 #include "Random.cuh"
 
 namespace LR {
-    namespace RT {
         __device__ Random::Random(curandState &state) : m_state(state) {}
 
         __device__ Vec3 Random::getVec3() {
@@ -36,6 +35,4 @@ namespace LR {
             Vec3 sample = p00 + ((i + v.getX()) * du) + ((j + v.getY()) * dv);
             return Ray(center, sample - center);
         }
-    }
-
 }

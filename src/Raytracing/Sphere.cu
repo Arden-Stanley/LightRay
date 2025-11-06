@@ -10,11 +10,11 @@ namespace LR {
             //cudaFree(m_material);
         }
         
-        __device__ bool Sphere::checkHit(Ray &r) const {
-            Vec3 oc = m_position - r.getOrigin();
-            float a = r.getDirection().lengthSqrd();
-            float b = dot(r.getDirection(), oc);
-            float c = oc.lengthSqrd() - m_radius * m_radius;
+        __device__ bool Sphere::CheckHit(Ray &r) const {
+            Vec3 oc = m_position - r.Origin();
+            float a = r.Direction().LengthSqrd();
+            float b = Dot(r.Direction(), oc);
+            float c = oc.LengthSqrd() - m_radius * m_radius;
 
             float discriminant = b * b - a * c;
             if (discriminant < 0) {
@@ -30,26 +30,26 @@ namespace LR {
                 }
             }
 
-            setPayload(r, root);
+            Payload(r, root);
             return true;
         }
 
-        __device__ Vec3 Sphere::getCenter() const {
+        __device__ Vec3 Sphere::Center() const {
             return m_position;
         }
 
-        __device__ float Sphere::getRadius() const {
+        __device__ float Sphere::Radius() const {
             return m_radius;
         }
 
-        __device__ void Sphere::setPayload(Ray &ray, float t) const {
-            Vec3 hit = ray.pointAt(t);
+        __device__ void Sphere::Payload(Ray &ray, float t) const {
+            Vec3 hit = ray.PointAt(t);
             ray.payload.t = t;
             ray.payload.hit = hit;
             ray.payload.normal = (hit - m_position) / m_radius;
         }
 
-        __device__ Material *Sphere::getMat() const {
+        __device__ Material* Sphere::Mat() const {
             return m_material;
         }
 }

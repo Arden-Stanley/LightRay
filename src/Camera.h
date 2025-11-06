@@ -12,7 +12,7 @@ namespace LR {
             ~Camera();
             void Move(const Position &offset);
             void MoveTo(const Position &pos);
-            Position GetPos() const;
+            Position Pos() const;
         private:
             Position m_pos;
     };

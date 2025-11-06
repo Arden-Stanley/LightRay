@@ -1,7 +1,7 @@
 #include "RaytracingKernel.cuh"
 
 namespace LR {
-    __global__ void renderKernel(cudaSurfaceObject_t surf, Vec3 cameraPos, int width, int height, unsigned long long seed) {
+    __global__ void RenderKernel(cudaSurfaceObject_t surf, Vec3 cameraPos, int width, int height, unsigned long long seed) {
         int i = threadIdx.x + blockIdx.x * blockDim.x;
         int j = threadIdx.y + blockIdx.y * blockDim.y;
         if ((i < width) && (j < height)) {
@@ -25,41 +25,48 @@ namespace LR {
             Lambertian mat2({0.0, 1.0, 0.2});
             Metal mat3({0.8, 0.8, 0.8}, 0.05);
             Dielectric mat4(0.9);
+            Metal mat5({0.8, 0.6, 0.6}, 0.6);
 
             Sphere sphere(1.0, {-2.0, 0.0, -3.0}, &mat1);
             Sphere mirror(1.0, {2.0, 0.0, -3.0}, &mat3);
+            Sphere metal(0.7, {0.0, 0.0, -3.0}, &mat5);
             Sphere glass(1.0, {0.0, 0.0, -3.0}, &mat4);
             Sphere ground(100.0, {0.0, -101.0, -3.0}, &mat2);
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 4; s++) {
-                Ray ray = randGen.getSampRay(i, j, firstPixel, du, dv, cameraCenter);
+            for (int s = 0; s < 5; s++) {
+                Ray ray = randGen.SampRay(i, j, firstPixel, du, dv, cameraCenter);
                 Vec3 color(0.5, 0.8, 1.0);
                 Material *mat;
                 for (int idx = 0; idx < 5; idx++) {
-                    if (sphere.checkHit(ray)) {
-                        mat = sphere.getMat();
+                    if (sphere.CheckHit(ray)) {
+                        mat = sphere.Mat();
                     }
-                    else if (mirror.checkHit(ray)) {
-                        mat = mirror.getMat();
+                    
+                    else if (mirror.CheckHit(ray)) {
+                        mat = mirror.Mat();
+                    }
+                    
+                    else if (metal.CheckHit(ray)) {
+                        mat = metal.Mat();
                     }
                     //else if (glass.checkHit(ray)) {
                        // mat = glass.getMat();
                    // }
-                    else if (ground.checkHit(ray)) {
-                        mat = ground.getMat();
+                    else if (ground.CheckHit(ray)) {
+                        mat = ground.Mat();
                     }
                     else { 
                         break;
                     }
-                    color = color * mat->getAlbedo();
-                    ray = mat->scatter(ray, randGen);
+                    color = color * mat->Albedo();
+                    ray = mat->Scatter(ray, randGen);
                 }
                 finalColor += color;
             }
 
-            finalColor = finalColor / 4;
-            float4 pixelColor = make_float4(finalColor.getX(), finalColor.getY(), finalColor.getZ(), 1.0);
+            finalColor = finalColor / 5;
+            float4 pixelColor = make_float4(finalColor.X(), finalColor.Y(), finalColor.Z(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    
     }

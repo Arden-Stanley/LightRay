@@ -12,7 +12,7 @@ namespace LR
 			EventSystem(Window* window, Camera* camera);
 			~EventSystem();
 			
-			void processInput(float deltaTime);
+			void ProcessInput(float deltaTime);
 
 			bool IsKeyPressed(int key) const;
 			bool IsMouseButtonPressed(int button) const;

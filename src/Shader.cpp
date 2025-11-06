@@ -2,10 +2,9 @@
 
 namespace LR 
 {
-	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
-	{
-		unsigned int vertexShader = m_loadShader(vertexPath, VERTEX);
-		unsigned int fragmentShader = m_loadShader(fragmentPath, FRAGMENT);
+	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
+		unsigned int vertexShader = m_LoadShader(vertexPath, VERTEX);
+		unsigned int fragmentShader = m_LoadShader(fragmentPath, FRAGMENT);
 
 		m_program = glCreateProgram();
 		glAttachShader(m_program, vertexShader);
@@ -18,7 +17,7 @@ namespace LR
 	
 	Shader::~Shader() {}
 
-	unsigned int Shader::m_loadShader(const std::string &path, Type shaderType) const 
+	unsigned int Shader::m_LoadShader(const std::string &path, Type shaderType) const 
 	{
 		std::ifstream file(path);
 		if (!file)
@@ -68,7 +67,7 @@ namespace LR
 		return shader;
 	}
 
-	void Shader::use() const {
+	void Shader::Use() const {
 		glUseProgram(m_program);
 	}
 }

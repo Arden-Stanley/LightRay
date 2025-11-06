@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	ImGui_ImplGlfw_InitForOpenGL(window->getGLFWWindow(), true);
+	ImGui_ImplGlfw_InitForOpenGL(window->GLFWWindow(), true);
 	ImGui_ImplOpenGL3_Init();
 	ImGui::StyleColorsDark();
 	
@@ -44,22 +44,21 @@ int main(int argc, char** argv)
 
 	//LR::Scene scene;
 	
-	while(window->isRunning())
+	while(window->IsRunning())
 	{	
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		eventSystem->processInput(deltaTime);
+		eventSystem->ProcessInput(deltaTime);
 
-		screenBuffer->render(bufferShader, *camera);
+		screenBuffer->Render(bufferShader, *camera);
 
-		window->update();
 		
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 		ImGui::Begin("Light-Ray Editor");
 
 		//ADD TO SCENE LOGIC HERE
@@ -78,6 +77,9 @@ int main(int argc, char** argv)
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		window->Update();
+
 	}
 
 	//ImGui Cleanup

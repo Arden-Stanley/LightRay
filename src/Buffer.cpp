@@ -3,7 +3,7 @@
 namespace LR 
 {
 	Buffer::Buffer(const std::unique_ptr<Window> &window)
-		: m_vbo(0), m_vao(0), m_width(window->getWidth()), m_height(window->getHeight()), m_texture(0), m_renderer(nullptr)
+		: m_vbo(0), m_vao(0), m_width(window->Width()), m_height(window->Height()), m_texture(0), m_renderer(nullptr)
 	{
 		float quad[] =
 		{   //vertices        //texture coords
@@ -42,10 +42,10 @@ namespace LR
 	}
 
 
-	void Buffer::render(const Shader &shader, const Camera &camera)
+	void Buffer::Render(const Shader &shader, const Camera &camera)
 	{
-		m_renderer->render({camera.GetPos().x, camera.GetPos().y, camera.GetPos().z});
-		shader.use();
+		m_renderer->Render({camera.Pos().x, camera.Pos().y, camera.Pos().z});
+		shader.Use();
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 		glBindVertexArray(m_vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);

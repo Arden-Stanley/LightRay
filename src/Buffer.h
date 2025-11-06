@@ -14,7 +14,7 @@ namespace LR
 		public:
 			Buffer(const std::unique_ptr<Window> &window);
 			~Buffer() = default;
-			void render(const Shader &shader, const Camera &camera);
+			void Render(const Shader &shader, const Camera &camera);
 		private:
 			unsigned int m_vbo;
 			unsigned int m_vao;

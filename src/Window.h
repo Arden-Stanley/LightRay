@@ -10,12 +10,12 @@ namespace LR
 		public:
 			Window(int width, int height, const std::string &title);
 			~Window();
-			void update() const;
-			bool isRunning() const;
-			int getWidth() const;
-			int getHeight() const;
-			GLFWwindow* getGLFWWindow() const;
-			bool isKeyPressed(int key) const;
+			void Update() const;
+			bool IsRunning() const;
+			int Width() const;
+			int Height() const;
+			GLFWwindow* GLFWWindow() const;
+			bool IsKeyPressed(int key) const;
 		private:
 			int m_width, m_height;
 			std::string m_title;

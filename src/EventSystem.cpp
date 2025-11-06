@@ -9,12 +9,12 @@ namespace LR
 
 	EventSystem::~EventSystem() {}
 
-	void EventSystem::processInput(float deltaTime)
+	void EventSystem::ProcessInput(float deltaTime)
 	{
 		// Exit program with the ESC key
 		if (IsKeyPressed(GLFW_KEY_ESCAPE)) 
 		{
-			glfwSetWindowShouldClose(m_window->getGLFWWindow(), true);
+			glfwSetWindowShouldClose(m_window->GLFWWindow(), true);
 		}
 		moveSpeed = 5.0f * deltaTime;
 		//Camera controls
@@ -27,16 +27,17 @@ namespace LR
 		if (IsKeyPressed(GLFW_KEY_D))
 			m_camera->Move(Position{moveSpeed, 0, 0});
 	}
+	
 	bool EventSystem::IsKeyPressed(int key) const 
 	{
-		return m_window->isKeyPressed(key);
+		return m_window->IsKeyPressed(key);
 	}
 	bool EventSystem::IsMouseButtonPressed(int button) const 
 	{
-		return glfwGetMouseButton(m_window->getGLFWWindow(), button) == GLFW_PRESS;
+		return glfwGetMouseButton(m_window->GLFWWindow(), button) == GLFW_PRESS;
 	}
 	void EventSystem::GetMousePosition(double& x, double& y) const 
 	{
-		glfwGetCursorPos(m_window->getGLFWWindow(), &x, &y);
+		glfwGetCursorPos(m_window->GLFWWindow(), &x, &y);
 	}
 }

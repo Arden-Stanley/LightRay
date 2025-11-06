@@ -6,15 +6,15 @@ namespace LR {
 
         __host__ __device__ Vec3::Vec3(float x, float y, float z) : m_vec{x, y, z} {}  
 
-        __host__ __device__ float Vec3::getX() const {
+        __host__ __device__ float Vec3::X() const {
             return m_vec[0];
         }
 
-        __host__ __device__ float Vec3::getY() const {
+        __host__ __device__ float Vec3::Y() const {
             return m_vec[1];
         }
 
-        __host__ __device__ float Vec3::getZ() const {
+        __host__ __device__ float Vec3::Z() const {
             return m_vec[2];
         }
 
@@ -34,11 +34,11 @@ namespace LR {
             return *this *= 1 / t;
         }
 
-        __host__ __device__ float Vec3::length() const {
-            return std::sqrt(lengthSqrd());
+        __host__ __device__ float Vec3::Length() const {
+            return std::sqrt(LengthSqrd());
         }
 
-        __host__ __device__ float Vec3::lengthSqrd() const {
+        __host__ __device__ float Vec3::LengthSqrd() const {
             return m_vec[0] * m_vec[0] + m_vec[1] * m_vec[1] + m_vec[2] * m_vec[2];
         }
 
@@ -80,11 +80,11 @@ namespace LR {
             return (1/t) * v;
         }
 
-        __host__ __device__ float dot(const Vec3& u, const Vec3& v) {
+        __host__ __device__ float Dot(const Vec3& u, const Vec3& v) {
             return u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
         }
 
-        __host__ __device__ Vec3 cross(const Vec3& u, const Vec3& v) {
+        __host__ __device__ Vec3 Cross(const Vec3& u, const Vec3& v) {
             return Vec3(
                 u[1] * v[2] - u[2] * v[1], 
                 u[2] * v[0] - u[0] * v[2], 
@@ -92,7 +92,7 @@ namespace LR {
             );
         }
 
-        __host__ __device__ Vec3 unit(const Vec3& v) {
-            return v / v.length();
+        __host__ __device__ Vec3 Unit(const Vec3& v) {
+            return v / v.Length();
         }
 }

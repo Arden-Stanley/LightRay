@@ -10,14 +10,14 @@ namespace LR
 		public:
 			Shader(const std::string &vertexPath, const std::string &fragmentPath);
 			~Shader();
-			void use() const;
+			void Use() const;
 		private:
 			typedef enum {
 				VERTEX,
 				FRAGMENT
 			} Type;
 			unsigned int m_program;
-			unsigned int m_loadShader(const std::string &path, Type shaderType) const;
+			unsigned int m_LoadShader(const std::string &path, Type shaderType) const;
 
 	};
 }

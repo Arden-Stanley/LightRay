@@ -26,7 +26,7 @@ namespace LR {
         cudaGraphicsUnregisterResource(m_texPtr);
     }
 
-    void Renderer::render(const Pos &camPos) {
+    void Renderer::Render(const Pos &camPos) {
         cudaGraphicsMapResources(1, &m_texPtr, 0);
         cudaError_t err = cudaGetLastError();
         if (err != cudaSuccess) {
@@ -41,7 +41,6 @@ namespace LR {
 
 
         cudaResourceDesc resDesc = {};
-        //memset(&resDesc, 0, sizeof(resDesc));
         resDesc.resType = cudaResourceTypeArray;
         resDesc.res.array.array = m_mappedTex;
         err = cudaGetLastError();
@@ -59,8 +58,8 @@ namespace LR {
         
         dim3 blocks(16, 16); 
         dim3 grid((m_screenWidth + 15) / 16, (m_screenHeight + 15) / 16);
-        static float rando = 1000;
-        renderKernel<<<grid, blocks>>>(surf, {camPos.x, camPos.y, camPos.z},m_screenWidth, m_screenHeight, 1000021);
+        static float rando = 10;
+        RenderKernel<<<grid, blocks>>>(surf, {camPos.x, camPos.y, camPos.z},m_screenWidth, m_screenHeight, 100);
         rando += 21;
         
         

@@ -13,7 +13,7 @@ namespace LR {
             Renderer() = default;
             Renderer(unsigned int texHandle, int screenWidth, int screenHeight);
             ~Renderer();
-            void render(const Pos &camPos);
+            void Render(const Pos &camPos);
         private:
             unsigned int m_texHandle;
             int m_screenWidth, m_screenHeight;

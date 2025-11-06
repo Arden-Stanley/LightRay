@@ -15,7 +15,7 @@ namespace LR {
         m_pos = pos;
     }
 
-    Position Camera::GetPos() const {
+    Position Camera::Pos() const {
         return m_pos;
     }
 }

@@ -9,6 +9,8 @@ namespace LR {
             curand_init(seed, i * j, 0, &state);
             Random randGen(state);
 
+            const int samples = 5;
+
             
             float focalLength = 1.0;
             Vec3 cameraCenter = cameraPos;
@@ -41,11 +43,11 @@ namespace LR {
             );
 
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 8; s++) {
+            for (int s = 0; s < samples; s++) {
                 Ray ray = randGen.SampRay(i, j, firstPixel, du, dv, cameraCenter);
                 Vec3 color(0.5, 0.8, 1.0);
                 Material *mat;
-                for (int idx = 0; idx < 10; idx++) {
+                for (int idx = 0; idx < 5; idx++) {
                     /*if (sphere.CheckHit(ray)) {
                         mat = sphere.Mat();
                     }
@@ -76,7 +78,7 @@ namespace LR {
                 finalColor += color;
             }
 
-            finalColor = finalColor / 8;
+            finalColor = finalColor / samples;
             float4 pixelColor = make_float4(finalColor.X(), finalColor.Y(), finalColor.Z(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

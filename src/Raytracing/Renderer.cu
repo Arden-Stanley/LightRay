@@ -55,9 +55,9 @@ namespace LR {
             std::cerr << "CUDA Kernel Error 5: " << cudaGetErrorString(err) << "\n";
         }
 
-        
-        dim3 blocks((m_screenWidth + 31) / 32, (m_screenHeight + 31) / 32); 
-        dim3 threads(32, 32);
+        dim3 threads(64, 64);
+        dim3 blocks((m_screenWidth + threads.x - 1) / threads.x, (m_screenHeight + threads.y - 1) / threads.y); 
+
         static float rando = 10;
         RenderKernel<<<threads, blocks>>>(surf, {camPos.x, camPos.y, camPos.z},m_screenWidth, m_screenHeight, 100);
         rando += 21;

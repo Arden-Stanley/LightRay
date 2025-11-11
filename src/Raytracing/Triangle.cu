@@ -33,6 +33,10 @@ namespace LR {
 
         float t = inverseDet * Dot(edge2, sE1);
         
+        if (t < 0.0) {
+            return false;
+        }
+
         Payload(ray, t);
         return true;
     }

@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <glm/glm.hpp>
 #include <fstream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

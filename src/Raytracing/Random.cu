@@ -28,8 +28,8 @@ namespace LR {
 
         __device__ Ray Random::SampRay(int i, int j, Vec3 p00, Vec3 du, Vec3 dv, Vec3 center) {
             Vec3 v;
-            v[0] = curand_uniform(&m_state) - 0.5f;
-            v[1] = curand_uniform(&m_state) - 0.5f;
+            v[0] = curand_uniform(&m_state) + 0.5f;
+            v[1] = curand_uniform(&m_state) + 0.5f;
             v[2] = 0.0;
 
             Vec3 sample = p00 + ((i + v.X()) * du) + ((j + v.Y()) * dv);

@@ -33,13 +33,20 @@ namespace LR {
             Sphere glass(1.0, {0.0, 0.0, -3.0}, &mat4);
             Sphere ground(100.0, {0.0, -101.0, -3.0}, &mat2);
 
+            Triangle triangle(
+                Vec3(-1.0, -1.0, -3.0), 
+                Vec3(1.0, -1.0, -3.0), 
+                Vec3(0.0, 1.0, -3.0),
+                &mat3
+            );
+
             Vec3 finalColor = Vec3(0, 0, 0);
-            for (int s = 0; s < 5; s++) {
+            for (int s = 0; s < 8; s++) {
                 Ray ray = randGen.SampRay(i, j, firstPixel, du, dv, cameraCenter);
                 Vec3 color(0.5, 0.8, 1.0);
                 Material *mat;
-                for (int idx = 0; idx < 5; idx++) {
-                    if (sphere.CheckHit(ray)) {
+                for (int idx = 0; idx < 10; idx++) {
+                    /*if (sphere.CheckHit(ray)) {
                         mat = sphere.Mat();
                     }
                     
@@ -53,6 +60,10 @@ namespace LR {
                     //else if (glass.checkHit(ray)) {
                        // mat = glass.getMat();
                    // }
+                   */
+                    if (triangle.CheckHit(ray)) {
+                        mat = triangle.Mat();
+                    }
                     else if (ground.CheckHit(ray)) {
                         mat = ground.Mat();
                     }
@@ -65,7 +76,7 @@ namespace LR {
                 finalColor += color;
             }
 
-            finalColor = finalColor / 5;
+            finalColor = finalColor / 8;
             float4 pixelColor = make_float4(finalColor.X(), finalColor.Y(), finalColor.Z(), 1.0);
             surf2Dwrite(pixelColor, surf, i * sizeof(float4), j);
         }    

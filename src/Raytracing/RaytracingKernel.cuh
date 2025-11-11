@@ -6,6 +6,7 @@
 #include "Sphere.cuh"
 #include "Random.cuh"
 #include "Material.cuh"
+#include "Triangle.cuh"
 #include <curand_kernel.h>
 
 namespace LR {

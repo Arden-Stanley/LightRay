@@ -16,6 +16,7 @@ add_executable(
     src/Raytracing/Ray.cu
     src/Raytracing/RaytracingKernel.cu 
     src/Raytracing/Sphere.cu
+    src/Raytracing/Triangle.cu
     src/Raytracing/Random.cu
     src/Raytracing/Material.cu
 )

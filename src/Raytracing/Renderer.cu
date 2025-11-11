@@ -56,10 +56,10 @@ namespace LR {
         }
 
         
-        dim3 blocks(16, 16); 
-        dim3 grid((m_screenWidth + 15) / 16, (m_screenHeight + 15) / 16);
+        dim3 blocks((m_screenWidth + 31) / 32, (m_screenHeight + 31) / 32); 
+        dim3 threads(32, 32);
         static float rando = 10;
-        RenderKernel<<<grid, blocks>>>(surf, {camPos.x, camPos.y, camPos.z},m_screenWidth, m_screenHeight, 100);
+        RenderKernel<<<threads, blocks>>>(surf, {camPos.x, camPos.y, camPos.z},m_screenWidth, m_screenHeight, 100);
         rando += 21;
         
         
